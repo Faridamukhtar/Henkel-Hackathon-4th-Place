@@ -3,6 +3,7 @@ import { FaVolumeOff, FaVolumeUp } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import HairQuestionCard from "./components/HairQuestionCard";
 import DetailsGuide from "./components/DetailsGuide";
+import LandingPage from "./components/LandingPage";
 import "./App.css";
 
 interface Video {
@@ -17,6 +18,7 @@ const VIDEOS: Video[] = [
 ];
 
 function App() {
+  const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
   const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0);
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const [currentQuestion, setCurrentQuestion] = useState<number>(0); // Start at 0, face capture is question 0
@@ -209,6 +211,15 @@ function App() {
     video.muted = !video.muted;
     setIsMuted(video.muted);
   };
+
+  const handleStartQuiz = () => {
+    setShowLandingPage(false);
+  };
+
+  // Show landing page first
+  if (showLandingPage) {
+    return <LandingPage onStartQuiz={handleStartQuiz} />;
+  }
 
   return (
     <motion.div
