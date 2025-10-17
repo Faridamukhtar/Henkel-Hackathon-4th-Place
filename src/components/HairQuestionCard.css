@@ -414,3 +414,8 @@
   flex: 1;
   justify-content: space-between;
 }
+
+/* Extra spacing before the progress bar */
+.progress-bar-section {
+  margin-top: 2rem;
+}

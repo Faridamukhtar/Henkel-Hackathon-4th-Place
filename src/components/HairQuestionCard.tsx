@@ -17,6 +17,7 @@ interface HairQuestionCardProps {
   setSelectedAnswer: (answer: string) => void;
   showFaceCapture?: boolean;
   onFaceCapture?: (imageData: string) => void;
+  onFaceCaptureFile?: (file: File) => void;
   onSkipFaceCapture?: () => void;
   isFaceCaptureStep?: boolean;
 }
@@ -35,6 +36,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
   setSelectedAnswer,
   showFaceCapture = false,
   onFaceCapture,
+  onFaceCaptureFile,
   onSkipFaceCapture,
   isFaceCaptureStep = false,
 }) => {
@@ -70,9 +72,9 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
   // If it's the face capture step, show FaceCapture component
   if (isFaceCaptureStep) {
     return (
-      <div className="card-and-progress">
+      <div>
         {/* Question Card */}
-        <div className="question-card shadow-sm border-2 border-stone-900 bg-white rounded-lg">
+        <div className="wshadow-sm border-2 border-stone-900 bg-white rounded-lg">
           <div className="p-8 space-y-6">
             {/* Question Header */}
             <div className="space-y-2">
@@ -85,6 +87,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
             {/* Face Capture Component */}
             <FaceCapture
               onCapture={onFaceCapture || (() => {})}
+              onCaptureFile={onFaceCaptureFile}
               onSkip={onSkipFaceCapture || (() => {})}
               onNext={onSkipFaceCapture || (() => {})}
               capturedImage={capturedImage}
@@ -93,7 +96,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
         </div>
 
         {/* Progress Bar */}
-        <div className="progress-bar-section">
+        <div className="progress-bar-section mt-12">
           <ProgressBar
             currentQuestion={currentQuestion}
             totalQuestions={totalQuestions}

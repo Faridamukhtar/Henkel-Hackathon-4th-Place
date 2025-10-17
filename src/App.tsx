@@ -24,6 +24,7 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0); // Start at 0, face capture is question 0
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [capturedImageFile, setCapturedImageFile] = useState<File | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [length, setLength] = useState<string | null>(null);
   const [greasiness, setGreasiness] = useState<string | null>(null);
@@ -164,6 +165,10 @@ function App() {
   const handleFaceCapture = (imageData: string) => {
     // Store the captured image only; navigation handled by Next
     setCapturedImage(imageData);
+  };
+
+  const handleFaceCaptureFile = (file: File) => {
+    setCapturedImageFile(file);
   };
 
   const handleSkipFaceCapture = () => {
@@ -334,6 +339,7 @@ function App() {
               currentQuestion === 0 ? () => {} : setters[currentQuestion - 1]
             }
             onFaceCapture={handleFaceCapture}
+            onFaceCaptureFile={handleFaceCaptureFile}
             onSkipFaceCapture={handleSkipFaceCapture}
             isFaceCaptureStep={currentQuestion === 0}
           />
