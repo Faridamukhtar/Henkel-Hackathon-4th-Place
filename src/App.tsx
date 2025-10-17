@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import HairQuestionCard from "./components/HairQuestionCard";
 import DetailsGuide from "./components/DetailsGuide";
 import LandingPage from "./components/LandingPage";
+import ResultsDisplay from "./components/ResultsDisplay";
 import "./App.css";
 interface Video {
   src: string;
@@ -24,6 +25,9 @@ function App() {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [capturedImageFile, setCapturedImageFile] = useState<File | null>(null);
+  const [results, setResults] = useState<any>(null);
+  const [showResults, setShowResults] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [length, setLength] = useState<string | null>(null);
   const [greasiness, setGreasiness] = useState<string | null>(null);
@@ -88,6 +92,8 @@ function App() {
 
 
   const handleSubmit = async () => {
+    setIsLoading(true);
+    
     const hair_info: {
       length?: string;
       greasy_roots?: boolean;
@@ -131,9 +137,15 @@ function App() {
 
       const result = await response.json();
       console.log("API result:", result);
-      // Do something with the result (e.g., display recommendation)
+      
+      // Store the results and show the results component
+      setResults(result);
+      setShowResults(true);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error submitting hair info:", error);
+      setIsLoading(false);
+      // You might want to show an error message to the user here
     }
   };
 
@@ -212,165 +224,279 @@ function App() {
     setShowLandingPage(false);
   };
 
+  const getProductImage = (productLine: string) => {
+    const imageMap: { [key: string]: string } = {
+      "Aqua Revive": "/assets/aqua.jpg",
+      "Supreme Length": "/assets/supreme length.jpg",
+      "Oil Nutritive": "/assets/oil nutritive.jpg",
+      "Ultimate Repair": "/assets/ultimate repare.jpg",
+      "Total Repair": "/assets/Total Repair.jpg"
+    };
+    
+    // Find matching product line (case insensitive)
+    const normalizedLine = productLine.toLowerCase();
+    for (const [key, value] of Object.entries(imageMap)) {
+      if (normalizedLine.includes(key.toLowerCase())) {
+        return value;
+      }
+    }
+    
+    // Default fallback
+    return "/assets/Gliss Logo 1.png";
+  };
+
+  const getProductTheme = (productLine: string) => {
+    const themeMap: { [key: string]: { primary: string; secondary: string; text: string } } = {
+      "Aqua Revive": { primary: "#00A0C6", secondary: "#D2B273", text: "#FFFFFF" },
+      "Oil Nutritive": { primary: "#F2B732", secondary: "#C4902F", text: "#FFFFFF" },
+      "Supreme Length": { primary: "#EC2E87", secondary: "#D6B35A", text: "#FFFFFF" },
+      "Total Repair": { primary: "#F7F7F7", secondary: "#C28A42", text: "#000000" },
+      "Ultimate Repair": { primary: "#1B1B1B", secondary: "#B69254", text: "#FFFFFF" }
+    };
+    
+    const normalizedLine = productLine.toLowerCase();
+    for (const [key, value] of Object.entries(themeMap)) {
+      if (normalizedLine.includes(key.toLowerCase())) {
+        return value;
+      }
+    }
+    
+    // Default theme
+    return { primary: "#667eea", secondary: "#764ba2", text: "#FFFFFF" };
+  };
+
+  const handleRestartQuiz = () => {
+    // Reset all quiz state
+    setCurrentQuestion(0);
+    setCapturedImage(null);
+    setCapturedImageFile(null);
+    setLength(null);
+    setGreasiness(null);
+    setSplitEnds(null);
+    setDryness(null);
+    setShine(null);
+    setColored(null);
+    setHeatStyling(null);
+    setAnsweredQuestions(Array(questions.length).fill(false));
+    setResults(null);
+    setShowResults(false);
+    setIsLoading(false);
+  };
+
   // Show landing page first
   if (showLandingPage) {
     return <LandingPage onStartQuiz={handleStartQuiz} />;
   }
 
   return (
-      <motion.div
-          className="App"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-      >
-        <div className="split-container">
-          {/* Left Side - Single Video Player */}
-          <div className="video-section" onClick={toggleMute}>
-            <div className="video-container">
-              <video
+    <motion.div
+      className="App"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
+      <div className="split-container">
+        {/* Left Side - Video Player or Product Image */}
+        <div className="video-section">
+          {showResults && results ? (
+            <div 
+              className="product-showcase-left"
+              style={{
+                background: `linear-gradient(135deg, ${getProductTheme(results.recommendation.recommended_line).primary} 0%, ${getProductTheme(results.recommendation.recommended_line).secondary} 100%)`
+              }}
+            >
+              <div className="product-image-container-left">
+                <img 
+                  src={getProductImage(results.recommendation.recommended_line)} 
+                  alt={results.recommendation.recommended_line}
+                  className="product-image-left"
+                />
+              </div>
+              <div className="product-info-left">
+                <h3 
+                  className="product-title-left"
+                  style={{ color: getProductTheme(results.recommendation.recommended_line).text }}
+                >
+                  {results.recommendation.recommended_line}
+                </h3>
+                <p 
+                  className="product-subtitle-left"
+                  style={{ color: getProductTheme(results.recommendation.recommended_line).text }}
+                >
+                  Your Perfect Match
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div onClick={toggleMute}>
+              <div className="video-container">
+                <video
                   ref={videoRef}
                   autoPlay
                   muted={isMuted}
                   playsInline
                   className="video-player"
                   key={currentVideoIndex}
-              >
-                <source src={VIDEOS[currentVideoIndex].src} type="video/MP4" />
-                Your browser does not support the video tag.
-              </video>
-              <div className="video-overlay">
-                <div className="mute-indicator">
-                  {isMuted ? <FaVolumeOff /> : <FaVolumeUp />}
+                >
+                  <source src={VIDEOS[currentVideoIndex].src} type="video/MP4" />
+                  Your browser does not support the video tag.
+                </video>
+                <div className="video-overlay">
+                  <div className="mute-indicator">
+                    {isMuted ? <FaVolumeOff /> : <FaVolumeUp />}
+                  </div>
+                </div>
+                <div className="video-indicators">
+                  {VIDEOS.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`indicator ${index === currentVideoIndex ? "active" : ""
+                        }`}
+                      onClick={() => {
+                        setCurrentVideoIndex(index);
+                      }}
+                    />
+                  ))}
                 </div>
               </div>
-              <div className="video-indicators">
-                {VIDEOS.map((_, index) => (
-                    <div
-                        key={index}
-                        className={`indicator ${index === currentVideoIndex ? "active" : ""
-                        }`}
-                        onClick={() => {
-                          setCurrentVideoIndex(index);
-                        }}
-                    />
-                ))}
-              </div>
             </div>
-          </div>
+          )}
+        </div>
 
-          {/* Right Side - Quiz Area */}
+          {/* Right Side - Quiz Area, Loading, or Results */}
           <motion.div
               className="quiz-section"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <motion.div
-                className="quiz-header"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.6 }}
-              >
-                For Every You
-              </motion.h2>
-              <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.8 }}
-              >
-                Every strand has a story — let's find the shampoo that gets yours.
-              </motion.p>
-            </motion.div>
-
-            {/* Hair Question Card */}
-            <HairQuestionCard
-                question={
-                  currentQuestion === 0
-                      ? "Let's start by capturing your hair"
-                      : questions[currentQuestion - 1]
-                }
-                answers={currentQuestion === 0 ? [] : answers[currentQuestion - 1]}
-                subtitle={
-                  currentQuestion === 0
-                      ? "Please take a clear photo of your hair in its natural state — not styled, straightened, or freshly washed. Make sure your hair is visible from root to tip, with good lighting and minimal shadows."
-                      : subtitles[currentQuestion - 1]
-                }
-                currentQuestion={currentQuestion} // Keep 0-based for internal logic
-                totalQuestions={questions.length + 1} // 7 questions + 1 face capture = 8 total steps
-                capturedImage={capturedImage}
-                showFaceCapture={true} // Enable face capture step in progress bar
-                onNext={() => {
-                  // Mark current question as answered
-                  const updated = [...answeredQuestions];
-                  if (currentQuestion > 0) {
-                    updated[currentQuestion - 1] = true;
-                  }
-                  setAnsweredQuestions(updated);
-
-                  // Move to next question if it exists
-                  if (currentQuestion < questions.length) {
-                    setCurrentQuestion(currentQuestion + 1);
-                  }
-                  else {
-                    handleSubmit();
-                  }
-                }}
-                onQuestionClick={handleQuestionClick}
-                onMoreDetailsClick={handleMoreDetailsClick}
-                selectedAnswer={
-                  currentQuestion === 0
-                      ? null
-                      : selectedAnswers[currentQuestion - 1]
-                }
-                setSelectedAnswer={
-                  currentQuestion === 0 ? () => { } : setters[currentQuestion - 1]
-                }
-                onFaceCapture={handleFaceCapture}
-                onFaceCaptureFile={handleFaceCaptureFile}
-                onSkipFaceCapture={handleSkipFaceCapture}
-                isFaceCaptureStep={currentQuestion === 0}
+          {isLoading ? (
+            <div className="loading-container">
+              <div className="aqua-spinner">
+                <img 
+                  src="/assets/aqua.png" 
+                  alt="Loading Shampoo"
+                  className="spinning-bottle"
+                />
+              </div>
+              <h2 className="loading-title">Analyzing Your Hair</h2>
+              <p className="loading-subtitle">Finding your perfect match...</p>
+            </div>
+          ) : showResults && results ? (
+            <ResultsDisplay 
+              results={results} 
+              onRestart={handleRestartQuiz}
+              theme={getProductTheme(results.recommendation.recommended_line)}
             />
-
-            {/* Details Modal */}
-            <AnimatePresence>
-              {isDetailsModalOpen && (
-                  <motion.div
-                      className="modal-overlay"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      onClick={handleCloseModal}
+          ) : (
+            <>
+                <motion.div
+                    className="quiz-header"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                  <motion.h2
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.6 }}
                   >
-                    <motion.div
-                        className="modal-content"
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 50 }}
-                        transition={{ duration: 0.3 }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="modal-header">
-                        <h3>Question Details</h3>
-                        <button className="close-button" onClick={handleCloseModal}>
-                          ×
-                        </button>
-                      </div>
-                      <DetailsGuide
-                          currentQuestion={currentQuestion}
-                          question={questions[currentQuestion]}
-                      />
-                    </motion.div>
-                  </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
+                    For Every You
+                  </motion.h2>
+                  <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.8 }}
+                  >
+                    Every strand has a story — let's find the shampoo that gets yours.
+                  </motion.p>
+                </motion.div>
+
+                {/* Hair Question Card */}
+                <HairQuestionCard
+                    question={
+                      currentQuestion === 0
+                          ? "Let's start by capturing your hair"
+                          : questions[currentQuestion - 1]
+                    }
+                    answers={currentQuestion === 0 ? [] : answers[currentQuestion - 1]}
+                    subtitle={
+                      currentQuestion === 0
+                          ? "Please take a clear photo of your hair in its natural state — not styled, straightened, or freshly washed. Make sure your hair is visible from root to tip, with good lighting and minimal shadows."
+                          : subtitles[currentQuestion - 1]
+                    }
+                    currentQuestion={currentQuestion} // Keep 0-based for internal logic
+                    totalQuestions={questions.length + 1} // 7 questions + 1 face capture = 8 total steps
+                    capturedImage={capturedImage}
+                    showFaceCapture={true} // Enable face capture step in progress bar
+                    onNext={() => {
+                      // Mark current question as answered
+                      const updated = [...answeredQuestions];
+                      if (currentQuestion > 0) {
+                        updated[currentQuestion - 1] = true;
+                      }
+                      setAnsweredQuestions(updated);
+
+                      // Move to next question if it exists
+                      if (currentQuestion < questions.length) {
+                        setCurrentQuestion(currentQuestion + 1);
+                      }
+                      else {
+                        handleSubmit();
+                      }
+                    }}
+                    onQuestionClick={handleQuestionClick}
+                    onMoreDetailsClick={handleMoreDetailsClick}
+                    selectedAnswer={
+                      currentQuestion === 0
+                          ? null
+                          : selectedAnswers[currentQuestion - 1]
+                    }
+                    setSelectedAnswer={
+                      currentQuestion === 0 ? () => { } : setters[currentQuestion - 1]
+                    }
+                    onFaceCapture={handleFaceCapture}
+                    onFaceCaptureFile={handleFaceCaptureFile}
+                    onSkipFaceCapture={handleSkipFaceCapture}
+                    isFaceCaptureStep={currentQuestion === 0}
+                />
+
+                {/* Details Modal */}
+                <AnimatePresence>
+                  {isDetailsModalOpen && (
+                      <motion.div
+                          className="modal-overlay"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          onClick={handleCloseModal}
+                      >
+                        <motion.div
+                            className="modal-content"
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 50 }}
+                            transition={{ duration: 0.3 }}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                          <div className="modal-header">
+                            <h3>Question Details</h3>
+                            <button className="close-button" onClick={handleCloseModal}>
+                              ×
+                            </button>
+                          </div>
+                          <DetailsGuide
+                              currentQuestion={currentQuestion}
+                              question={questions[currentQuestion]}
+                          />
+                        </motion.div>
+                      </motion.div>
+                  )}
+                </AnimatePresence>
+              </>
+          )}
+        </motion.div>
         </div>
       </motion.div>
   );

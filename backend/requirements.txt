@@ -15,3 +15,8 @@ requests>=2.31.0
 
 # Pretty printing / optional enhancements
 rich>=13.5.0
+
+# Web framework and server
+fastapi>=0.119.0
+uvicorn>=0.37.0
+python-multipart>=0.0.20

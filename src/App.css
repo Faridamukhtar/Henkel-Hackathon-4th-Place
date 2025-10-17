@@ -266,3 +266,320 @@
     padding: 16px 20px;
   }
 }
+
+/* Left Side Loading Shampoo */
+.loading-shampoo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  text-align: center;
+  animation: slideInLeft 0.8s ease-out;
+}
+
+.loading-shampoo {
+  width: 300px;
+  height: 400px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+  animation: shampooFloat 2s ease-in-out infinite;
+}
+
+.loading-shampoo:hover {
+  transform: scale(1.02);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+.loading-shampoo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  animation: shampooRotate 3s linear infinite;
+}
+
+.loading-shampoo-text {
+  color: white;
+  max-width: 400px;
+}
+
+.loading-shampoo-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.loading-shampoo-subtitle {
+  font-size: 1.2rem;
+  margin: 0;
+  opacity: 0.9;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+@keyframes shampooFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shampooRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Left Side Product Display */
+.product-showcase-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  text-align: center;
+  animation: slideInLeft 0.8s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.product-image-container-left {
+  width: 300px;
+  height: 400px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.product-image-container-left:hover {
+  transform: scale(1.02);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+.product-image-left {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  animation: fadeInScale 0.8s ease-out 0.2s both;
+}
+
+.product-info-left {
+  color: white;
+  max-width: 400px;
+}
+
+.product-title-left {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.product-subtitle-left {
+  font-size: 1.2rem;
+  margin: 0;
+  opacity: 0.9;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design for left side loading shampoo */
+@media (max-width: 768px) {
+  .loading-shampoo-container {
+    padding: 1.5rem;
+  }
+  
+  .loading-shampoo {
+    width: 250px;
+    height: 320px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .loading-shampoo-title {
+    font-size: 2rem;
+  }
+  
+  .loading-shampoo-subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* Responsive design for left side product display */
+@media (max-width: 768px) {
+  .product-showcase-left {
+    padding: 1.5rem;
+  }
+  
+  .product-image-container-left {
+    width: 250px;
+    height: 320px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .product-title-left {
+    font-size: 2rem;
+  }
+  
+  .product-subtitle-left {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-shampoo-container {
+    padding: 1rem;
+  }
+  
+  .loading-shampoo {
+    width: 200px;
+    height: 260px;
+    margin-bottom: 1rem;
+  }
+  
+  .loading-shampoo-title {
+    font-size: 1.5rem;
+  }
+  
+  .product-showcase-left {
+    padding: 1rem;
+  }
+  
+  .product-image-container-left {
+    width: 200px;
+    height: 260px;
+    margin-bottom: 1rem;
+  }
+  
+  .product-title-left {
+    font-size: 1.5rem;
+  }
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.aqua-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.spinning-bottle {
+  width: 150px;
+  height: 200px;
+  object-fit: contain;
+  animation: shampooRotate 3s linear infinite;
+}
+
+
+.loading-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 0.5rem 0;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.loading-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive loading state */
+@media (max-width: 768px) {
+  .loading-container {
+    padding: 1.5rem;
+  }
+  
+  .spinning-bottle {
+    width: 120px;
+    height: 160px;
+  }
+  
+  .loading-title {
+    font-size: 1.75rem;
+  }
+  
+  .loading-subtitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-container {
+    padding: 1rem;
+  }
+  
+  .spinning-bottle {
+    width: 100px;
+    height: 130px;
+  }
+  
+  .loading-title {
+    font-size: 1.5rem;
+  }
+}
