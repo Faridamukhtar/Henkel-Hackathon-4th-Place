@@ -1,8 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { FaVolumeOff, FaVolumeUp } from 'react-icons/fa'
 import { AnimatePresence, motion } from 'framer-motion'
 import HairQuestionCard from './components/HairQuestionCard'
 import DetailsGuide from './components/DetailsGuide'
+import FaceCapture from './components/FaceCapture'
+import ProgressBar from './components/ProgressBar'
 import './App.css'
 
 interface Video {
@@ -19,8 +21,9 @@ const VIDEOS: Video[] = [
 function App() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0)
   const [isMuted, setIsMuted] = useState<boolean>(true)
-  const [currentQuestion, setCurrentQuestion] = useState<number>(0)
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0) // Start at 0, face capture is question 0
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false)
+  const [capturedImage, setCapturedImage] = useState<string | null>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [length, setLength] = useState<string | null>(null)
   const [greasiness, setGreasiness] = useState<string | null>(null)
@@ -162,6 +165,15 @@ function App() {
     setIsDetailsModalOpen(false)
   }
 
+  const handleFaceCapture = (imageData: string) => {
+    setCapturedImage(imageData)
+    setCurrentQuestion(1) // Move to first hair question after face capture
+  }
+
+  const handleSkipFaceCapture = () => {
+    setCurrentQuestion(1) // Move to first hair question after skipping
+  }
+
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
@@ -178,9 +190,14 @@ function App() {
     const video = videoRef.current
     if (!video) return
 
-    video.load()
-    video.play().catch(console.error)
-  }, [currentVideoIndex])
+    // Pause video during face capture to reduce resource competition
+    if (currentQuestion === 0) {
+      video.pause()
+    } else {
+      video.load()
+      video.play().catch(console.error)
+    }
+  }, [currentVideoIndex, currentQuestion])
 
   const toggleMute = () => {
     const video = videoRef.current
@@ -189,6 +206,7 @@ function App() {
     video.muted = !video.muted
     setIsMuted(video.muted)
   }
+
 
   return (
     <motion.div
@@ -266,11 +284,13 @@ function App() {
 
           {/* Hair Question Card */}
           <HairQuestionCard
-            question={questions[currentQuestion]}
-            answers={answers[currentQuestion]}
-            subtitle={subtitles[currentQuestion]}
-            currentQuestion={currentQuestion + 1}
-            totalQuestions={questions.length}
+            question={currentQuestion === 0 ? "Let's start by capturing your face" : questions[currentQuestion - 1]}
+            answers={currentQuestion === 0 ? [] : answers[currentQuestion - 1]}
+            subtitle={currentQuestion === 0 ? "Position your face within the guide and capture a photo" : subtitles[currentQuestion - 1]}
+            currentQuestion={currentQuestion} // Keep 0-based for internal logic
+            totalQuestions={questions.length + 1} // 7 questions + 1 face capture = 8 total steps
+            capturedImage={capturedImage}
+            showFaceCapture={true} // Enable face capture step in progress bar
             onNext={() => {
               // Mark current question as answered
               const updated = [...answeredQuestions];
@@ -284,8 +304,11 @@ function App() {
             }}
             onQuestionClick={handleQuestionClick}
             onMoreDetailsClick={handleMoreDetailsClick}
-            selectedAnswer={selectedAnswers[currentQuestion]}
-            setSelectedAnswer={setters[currentQuestion]}
+            selectedAnswer={currentQuestion === 0 ? null : selectedAnswers[currentQuestion - 1]}
+            setSelectedAnswer={currentQuestion === 0 ? () => {} : setters[currentQuestion - 1]}
+            onFaceCapture={handleFaceCapture}
+            onSkipFaceCapture={handleSkipFaceCapture}
+            isFaceCaptureStep={currentQuestion === 0}
           />
 
           {/* Details Modal */}

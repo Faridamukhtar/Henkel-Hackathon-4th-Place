@@ -1,5 +1,6 @@
 import React from "react";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from './ProgressBar'
+import FaceCapture from './FaceCapture'
 import "./HairQuestionCard.css";
 
 interface HairQuestionCardProps {
@@ -8,11 +9,16 @@ interface HairQuestionCardProps {
   subtitle?: string;
   currentQuestion: number;
   totalQuestions: number;
+  capturedImage?: string | null
   onNext?: () => void;
   onQuestionClick?: (index: number) => void;
   onMoreDetailsClick?: () => void;
   selectedAnswer: string | null;
   setSelectedAnswer: (answer: string) => void;
+  showFaceCapture?: boolean
+  onFaceCapture?: (imageData: string) => void
+  onSkipFaceCapture?: () => void
+  isFaceCaptureStep?: boolean
 }
 
 const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
@@ -21,11 +27,16 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
   subtitle,
   currentQuestion,
   totalQuestions,
+  capturedImage,
   onNext,
   onQuestionClick,
   onMoreDetailsClick,
   selectedAnswer,
   setSelectedAnswer,
+    showFaceCapture = false,
+    onFaceCapture,
+    onSkipFaceCapture,
+    isFaceCaptureStep = false
 }) => {
   const handleSelect = (answer: string) => {
     setSelectedAnswer(answer);
@@ -56,6 +67,44 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
     return ["Short", "Medium", "Long"].includes(answer);
   };
 
+  // If it's the face capture step, show FaceCapture component
+  if (isFaceCaptureStep) {
+    return (
+      <div className="card-and-progress">
+        {/* Question Card */}
+        <div className="question-card shadow-sm border-2 border-stone-900 bg-white rounded-lg">
+          <div className="p-8 space-y-6">
+            {/* Question Header */}
+            <div className="space-y-2">
+              <h2 className="text-2xl font-bold text-stone-900">
+                {currentQuestion + 1}/ {question}
+              </h2>
+              <p className="text-sm text-stone-600">
+                {subtitle}
+              </p>
+            </div>
+
+            {/* Face Capture Component */}
+            <FaceCapture 
+              onCapture={onFaceCapture || (() => {})}
+              onSkip={onSkipFaceCapture || (() => {})}
+            />
+          </div>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="progress-bar-section">
+          <ProgressBar
+            currentQuestion={currentQuestion}
+            totalQuestions={totalQuestions}
+            onQuestionClick={handleQuestionClick}
+            showFaceCapture={showFaceCapture}
+          />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="card-and-progress">
       {/* Question Card */}
@@ -78,6 +127,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
               <span className="button-text">More details</span>
             </button>
           </div>
+
 
           {/* Divider */}
           <div className="h-px bg-stone-200" />
@@ -134,10 +184,11 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
       {/* Progress Bar */}
       <div className="progress-bar-section">
         <ProgressBar
-          currentQuestion={currentQuestion - 1}
+          currentQuestion={currentQuestion}
           totalQuestions={totalQuestions}
           onQuestionClick={handleQuestionClick}
-        />
+          showFaceCapture={showFaceCapture}
+      />
       </div>
     </div>
   );
