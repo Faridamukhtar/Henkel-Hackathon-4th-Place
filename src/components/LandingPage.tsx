@@ -18,7 +18,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartQuiz }) => {
       {/* Header */}
       <header className="landing-header">
         <div className="logo">
-          <img src="/assets/shcwarzkopf.png" alt="Schwarzkopf" className="logo-image" />
+          <img src="/assets/Gliss Logo 1.png" alt="Schwarzkopf" className="logo-image" />
         </div>
       </header>
 
