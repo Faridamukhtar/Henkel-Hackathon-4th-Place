@@ -449,35 +449,35 @@
 .status-indicator {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  backdrop-filter: blur(10px);
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  backdrop-filter: blur(5px);
   transition: all 0.3s ease;
 }
 
 .status-indicator.positioned {
   background: rgba(16, 185, 129, 0.9);
   color: white;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
 }
 
 .status-indicator.detected-but-positioned {
   background: rgba(246, 190, 67, 0.9);
   color: white;
-  box-shadow: 0 4px 15px rgba(246, 190, 67, 0.3);
+  box-shadow: 0 2px 8px rgba(246, 190, 67, 0.2);
 }
 
 .status-indicator.not-detected {
   background: rgba(239, 68, 68, 0.9);
   color: white;
-  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
 }
 
 .status-icon {
-  font-size: 1.2rem;
+  font-size: 0.8rem;
   font-weight: bold;
 }
 
