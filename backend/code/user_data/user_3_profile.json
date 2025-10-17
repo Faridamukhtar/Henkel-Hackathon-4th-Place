@@ -1,0 +1,18 @@
+{
+  "quiz": {
+    "length": "Short",
+    "greasy_roots": true,
+    "split_ends": false,
+    "dryness": "somewhat dry",
+    "shine": "super shiny, almost reflective",
+    "colored": "Occasionally",
+    "heat": "Occasionally"
+  },
+  "image_analysis": "No image provided",
+  "recommendation": {
+    "recommended_line": "Supreme Length",
+    "reason": "It addresses greasy roots and provides protection for the hair, which is otherwise healthy.",
+    "product_routine": "Supreme Length Shampoo + Supreme Length Conditioner",
+    "alternative": "Oil Nutritive"
+  }
+}

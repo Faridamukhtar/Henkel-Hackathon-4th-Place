@@ -2,17 +2,17 @@
   "quiz": {
     "length": "Short",
     "greasy_roots": true,
-    "split_ends": true,
-    "dryness": "balanced",
-    "shine": "a little dull",
-    "colored": "Rarely",
-    "heat": "Occasionally"
+    "split_ends": false,
+    "dryness": "somewhat dry",
+    "shine": "super shiny, almost reflective",
+    "colored": "Occasionally",
+    "heat": "Rarely"
   },
   "image_analysis": "No image provided",
   "recommendation": {
     "recommended_line": "Oil Nutritive",
-    "reason": "Your hair experiences visible split ends and dullness, and this line provides nourishment to add shine and smoothness.",
-    "product_routine": "Oil Nutritive Shampoo + Oil Nutritive Conditioner + Oil Nutritive Mask",
-    "alternative": ""
+    "reason": "This line provides nourishment for your somewhat dry hair, helping to maintain its health and existing shine and smoothness.",
+    "product_routine": "Shampoo + Conditioner",
+    "alternative": "Supreme Length"
   }
 }
