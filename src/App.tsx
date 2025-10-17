@@ -180,6 +180,16 @@ function App() {
     return () => video.removeEventListener("ended", handleVideoEnd);
   }, []);
 
+  // Handle video loading when video index changes
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.load();
+    video.play().catch(console.error);
+  }, [currentVideoIndex]);
+
+  // Handle video pause/play based on current question
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -188,10 +198,9 @@ function App() {
     if (currentQuestion === 0) {
       video.pause();
     } else {
-      video.load();
       video.play().catch(console.error);
     }
-  }, [currentVideoIndex, currentQuestion]);
+  }, [currentQuestion]);
 
   const toggleMute = () => {
     const video = videoRef.current;
