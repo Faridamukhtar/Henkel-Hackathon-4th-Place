@@ -97,6 +97,12 @@
   cursor: pointer;
 }
 
+.indicator.disabled {
+  cursor: default !important;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .indicator.active {
   background: white;
 }
@@ -148,32 +154,33 @@
   .split-container {
     flex-direction: column;
   }
-  
+
   .video-section,
   .quiz-section {
     flex: none;
     height: 50vh;
   }
-  
+
   .quiz-header h2 {
     font-size: 2rem;
   }
 }
 
 @media (max-width: 768px) {
+
   .video-section,
   .quiz-section {
     padding: 1rem;
   }
-  
+
   .quiz-header h2 {
     font-size: 1.5rem;
   }
-  
+
   .video-indicators {
     bottom: 1rem;
   }
-  
+
   .indicator {
     width: 10px;
     height: 10px;
@@ -249,12 +256,12 @@
   .modal-overlay {
     padding: 10px;
   }
-  
+
   .modal-content {
     max-width: 100%;
     max-height: 90vh;
   }
-  
+
   .modal-header {
     padding: 16px 20px;
   }

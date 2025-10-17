@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { FaVolumeOff, FaVolumeUp } from 'react-icons/fa'
-import {AnimatePresence, motion} from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import HairQuestionCard from './components/HairQuestionCard'
 import DetailsGuide from './components/DetailsGuide'
 import './App.css'
@@ -38,15 +38,16 @@ function App() {
     "How often do you bleach/color your hair?",
     "How often do you use heat styling tools (like flat irons, curling wands, blow dryers)?",
   ]
-
+  const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(
+    Array(questions.length).fill(false));
   const answers = [
     ["Short", "Medium", "Long"],
     ["Every day", "Every 2–3 days", "Once a week"],
-    ["Yes","No"],
-    ["Very dry", "somewhat dry", "Balanced", "Moisturized"],
-    ["Super shiny, almost reflective", "A little dull", "dull", "I’m not sure"],
-    ["regularly", "occasionally", "rarely", "never"],
-    ["regularly", "occasionally", "rarely", "never"],
+    ["Yes", "No"],
+    ["Very dry", "Somewhat dry", "Balanced", "Moisturized"],
+    ["Super shiny, Almost reflective", "A little dull", "Dull", "I’m not sure"],
+    ["Regularly", "Occasionally", "Rarely", "Never"],
+    ["Regularly", "Occasionally", "Rarely", "Never"],
   ]
 
   const subtitles = [
@@ -146,8 +147,12 @@ function App() {
 
 
   const handleQuestionClick = (index: number) => {
-    setCurrentQuestion(index)
-  }
+    const canJump = answeredQuestions.slice(0, index).every(ans => ans);
+    if (canJump) {
+      setCurrentQuestion(index);
+    }
+  };
+
 
   const handleMoreDetailsClick = () => {
     setIsDetailsModalOpen(true)
@@ -180,13 +185,13 @@ function App() {
   const toggleMute = () => {
     const video = videoRef.current
     if (!video) return
-    
+
     video.muted = !video.muted
     setIsMuted(video.muted)
   }
 
   return (
-    <motion.div 
+    <motion.div
       className="App"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -194,14 +199,14 @@ function App() {
     >
       <div className="split-container">
         {/* Left Side - Single Video Player */}
-        <div 
-          className="video-section" 
+        <div
+          className="video-section"
           onClick={toggleMute}
         >
           <div className="video-container">
-            <video 
+            <video
               ref={videoRef}
-              autoPlay 
+              autoPlay
               muted={isMuted}
               playsInline
               className="video-player"
@@ -217,10 +222,12 @@ function App() {
             </div>
             <div className="video-indicators">
               {VIDEOS.map((_, index) => (
-                <div 
+                <div
                   key={index}
-                  className={`indicator ${index === currentVideoIndex ? 'active' : ''}`}
-                  onClick={() => setCurrentVideoIndex(index)}
+                  className={`indicator ${index === currentVideoIndex ? 'active' : ''} ${answeredQuestions[index] ? '' : 'disabled'}`}
+                  onClick={() => {
+                    setCurrentVideoIndex(index)
+                  }}
                 />
               ))}
             </div>
@@ -228,19 +235,19 @@ function App() {
         </div>
 
         {/* Right Side - Quiz Area */}
-        <motion.div 
+        <motion.div
           className="quiz-section"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <motion.div 
+          <motion.div
             className="quiz-header"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            
+
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -256,7 +263,7 @@ function App() {
               Every strand has a story — let's find the shampoo that gets yours.
             </motion.p>
           </motion.div>
-          
+
           {/* Hair Question Card */}
           <HairQuestionCard
             question={questions[currentQuestion]}
@@ -265,8 +272,14 @@ function App() {
             currentQuestion={currentQuestion + 1}
             totalQuestions={questions.length}
             onNext={() => {
+              // Mark current question as answered
+              const updated = [...answeredQuestions];
+              updated[currentQuestion] = true;
+              setAnsweredQuestions(updated);
+
+              // Move to next question if it exists
               if (currentQuestion < questions.length - 1) {
-                setCurrentQuestion(currentQuestion + 1)
+                setCurrentQuestion(currentQuestion + 1);
               }
             }}
             onQuestionClick={handleQuestionClick}
@@ -274,7 +287,7 @@ function App() {
             selectedAnswer={selectedAnswers[currentQuestion]}
             setSelectedAnswer={setters[currentQuestion]}
           />
-          
+
           {/* Details Modal */}
           <AnimatePresence>
             {isDetailsModalOpen && (
@@ -296,7 +309,7 @@ function App() {
                 >
                   <div className="modal-header">
                     <h3>Question Details</h3>
-                    <button 
+                    <button
                       className="close-button"
                       onClick={handleCloseModal}
                     >
