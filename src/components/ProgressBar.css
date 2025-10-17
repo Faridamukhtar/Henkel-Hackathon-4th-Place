@@ -56,15 +56,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: default;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   z-index: 4;
   border: 3px solid #e9ecef;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  pointer-events: none; /* default non-interactive */
 }
 
 .progress-dot:hover {
+  transform: none;
+}
+
+/* Past dots become interactive */
+.progress-dot.past {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.progress-dot.past:hover {
   transform: scale(1.1);
 }
 

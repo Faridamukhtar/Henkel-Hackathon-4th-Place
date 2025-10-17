@@ -1,67 +1,65 @@
-import React from 'react'
-import ProgressBar from './ProgressBar'
-import './HairQuestionCard.css'
+import React from "react";
+import ProgressBar from "./ProgressBar";
+import "./HairQuestionCard.css";
 
 interface HairQuestionCardProps {
-  question: string
-  answers: string[]
-  subtitle?: string
-  currentQuestion: number
-  totalQuestions: number
-  onNext?: () => void
-  onQuestionClick?: (index: number) => void
-  onMoreDetailsClick?: () => void
-  selectedAnswer: string | null
-  setSelectedAnswer: (answer: string) => void
+  question: string;
+  answers: string[];
+  subtitle?: string;
+  currentQuestion: number;
+  totalQuestions: number;
+  onNext?: () => void;
+  onQuestionClick?: (index: number) => void;
+  onMoreDetailsClick?: () => void;
+  selectedAnswer: string | null;
+  setSelectedAnswer: (answer: string) => void;
 }
 
 const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
   question,
-  answers, subtitle,
+  answers,
+  subtitle,
   currentQuestion,
   totalQuestions,
   onNext,
   onQuestionClick,
   onMoreDetailsClick,
-    selectedAnswer,
-    setSelectedAnswer
+  selectedAnswer,
+  setSelectedAnswer,
 }) => {
-
   const handleSelect = (answer: string) => {
-    setSelectedAnswer(answer)
-  }
+    setSelectedAnswer(answer);
+  };
 
   const handleNext = () => {
     if (selectedAnswer && onNext) {
-      onNext()
+      onNext();
     }
-  }
+  };
 
   const handleQuestionClick = (index: number) => {
     if (onQuestionClick) {
-      onQuestionClick(index)
+      onQuestionClick(index);
     }
-  }
+  };
 
   const getIconForAnswer = (answer: string) => {
     const iconMap: { [key: string]: string } = {
       Short: "/assets/ShortHair.png",
       Medium: "/assets/MediumHair.png",
-      Long: "/assets/LongHair.png"
-    }
-    return iconMap[answer] || ""
-  }
+      Long: "/assets/LongHair.png",
+    };
+    return iconMap[answer] || "";
+  };
 
   const isImageIcon = (answer: string) => {
-    return ["Short", "Medium", "Long"].includes(answer)
-  }
+    return ["Short", "Medium", "Long"].includes(answer);
+  };
 
   return (
-    <div className="space-y-8">
-     
-
+    <div className="card-and-progress">
       {/* Question Card */}
-      <div className="w-full shadow-sm border-2 border-stone-900 bg-white rounded-lg">
+      <div className="question-card shadow-sm border-2 border-stone-900 bg-white rounded-lg">
         <div className="p-8 space-y-6">
           {/* Question Header with More Details Link */}
           <div className="flex items-start justify-between gap-4">
@@ -73,7 +71,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
                 {subtitle || "Select one option that best describes you."}
               </p>
             </div>
-            <button 
+            <button
               onClick={onMoreDetailsClick}
               className="more-details-button"
             >
@@ -89,7 +87,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
               const isSelected = selectedAnswer === answer;
               const hasSelection = selectedAnswer !== null;
               const isUnselected = hasSelection && !isSelected;
-              
+
               return (
                 <button
                   key={answer}
@@ -102,16 +100,18 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
                       : "bg-white text-stone-900 border-stone-400 border-2 hover:border-stone-600"
                   }`}
                 >
-                {isImageIcon(answer) && (
-                  <div className="text-4xl mb-3">
-                    <img 
-                      src={getIconForAnswer(answer)} 
-                      alt={answer}
-                      className="w-12 h-12 object-contain"
-                    />
-                  </div>
-                )}
-                <span className="text-sm font-medium text-center">{answer}</span>
+                  {isImageIcon(answer) && (
+                    <div className="text-4xl mb-3">
+                      <img
+                        src={getIconForAnswer(answer)}
+                        alt={answer}
+                        className="w-12 h-12 object-contain"
+                      />
+                    </div>
+                  )}
+                  <span className="text-sm font-medium text-center">
+                    {answer}
+                  </span>
                 </button>
               );
             })}
@@ -122,21 +122,25 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
             onClick={handleNext}
             disabled={!selectedAnswer}
             className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
-              selectedAnswer ? "next-button-enabled" : "next-button-disabled bg-stone-200 text-stone-400 cursor-not-allowed"
+              selectedAnswer
+                ? "next-button-enabled"
+                : "next-button-disabled bg-stone-200 text-stone-400 cursor-not-allowed"
             }`}
           >
             Next
           </button>
         </div>
       </div>
-       {/* Progress Bar */}
-       <ProgressBar
-        currentQuestion={currentQuestion - 1}
-        totalQuestions={totalQuestions}
-        onQuestionClick={handleQuestionClick}
-      />
+      {/* Progress Bar */}
+      <div className="progress-bar-section">
+        <ProgressBar
+          currentQuestion={currentQuestion - 1}
+          totalQuestions={totalQuestions}
+          onQuestionClick={handleQuestionClick}
+        />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default HairQuestionCard
+export default HairQuestionCard;

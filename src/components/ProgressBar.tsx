@@ -1,69 +1,85 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import './ProgressBar.css'
+import React from "react";
+import { motion } from "framer-motion";
+import "./ProgressBar.css";
 
 interface ProgressBarProps {
-  currentQuestion: number
-  totalQuestions: number
-  onQuestionClick: (index: number) => void
+  currentQuestion: number;
+  totalQuestions: number;
+  onQuestionClick?: (index: number) => void;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ 
-  currentQuestion, 
-  totalQuestions, 
-  onQuestionClick 
+const ProgressBar: React.FC<ProgressBarProps> = ({
+  currentQuestion,
+  totalQuestions,
+  onQuestionClick,
 }) => {
   return (
-    <motion.div 
+    <motion.div
       className="progress-container"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 1.0 }}
     >
       <div className="progress-track">
-        <motion.div 
+        <motion.div
           className="progress-fill"
           initial={{ width: 0 }}
-          animate={{ width: `${((currentQuestion + 1) / totalQuestions) * 100}%` }}
+          animate={{
+            width: `${((currentQuestion + 1) / totalQuestions) * 100}%`,
+          }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
         />
         <div className="progress-dots">
-          {Array.from({ length: totalQuestions }, (_, index) => (
-            <motion.div 
-              key={index}
-              className={`progress-dot ${index <= currentQuestion ? 'completed' : ''} ${index === currentQuestion ? 'current' : ''}`}
-              onClick={() => onQuestionClick(index)}
-              whileHover={{ scale: 1.2, y: -2 }}
-              whileTap={{ scale: 0.9 }}
-              animate={{ 
-                scale: index === currentQuestion ? 1.1 : 1,
-                backgroundColor: index <= currentQuestion ? '#1B1B1B' : '#e9ecef'
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 20, delay: index * 0.1 }}
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-            >
-              <motion.div 
-                className="dot-inner"
-                animate={{ 
-                  scale: index === currentQuestion ? 1.2 : 1,
-                  color: index <= currentQuestion ? 'white' : '#6c757d'
+          {Array.from({ length: totalQuestions }, (_, index) => {
+            const isPast = index < currentQuestion;
+            const isCurrent = index === currentQuestion;
+            const isCompletedOrCurrent = index <= currentQuestion;
+            return (
+              <motion.div
+                key={index}
+                className={`progress-dot ${
+                  isCompletedOrCurrent ? "completed" : ""
+                } ${isCurrent ? "current" : ""} ${isPast ? "past" : ""}`}
+                animate={{
+                  scale: isCurrent ? 1.1 : 1,
+                  backgroundColor: isCompletedOrCurrent ? "#1B1B1B" : "#e9ecef",
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 20,
+                  delay: index * 0.1,
+                }}
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                onClick={
+                  isPast && onQuestionClick
+                    ? () => onQuestionClick(index)
+                    : undefined
+                }
               >
-                {index < currentQuestion ? '✓' : index + 1}
+                <motion.div
+                  className="dot-inner"
+                  animate={{
+                    scale: isCurrent ? 1.2 : 1,
+                    color: isCompletedOrCurrent ? "white" : "#6c757d",
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {isPast ? "✓" : index + 1}
+                </motion.div>
               </motion.div>
-            </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
-      <motion.div 
+      <motion.div
         className="progress-text"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
       >
-        <motion.span 
+        <motion.span
           className="question-counter"
           key={currentQuestion}
           initial={{ opacity: 0, x: -10 }}
@@ -72,7 +88,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         >
           Question {currentQuestion + 1} of {totalQuestions}
         </motion.span>
-        <motion.span 
+        <motion.span
           className="progress-percentage"
           key={`${currentQuestion}-percent`}
           initial={{ opacity: 0, x: 10 }}
@@ -83,7 +99,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         </motion.span>
       </motion.div>
     </motion.div>
-  )
-}
+  );
+};
 
-export default ProgressBar
+export default ProgressBar;

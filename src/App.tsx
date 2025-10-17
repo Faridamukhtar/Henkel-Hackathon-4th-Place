@@ -224,7 +224,7 @@ function App() {
               {VIDEOS.map((_, index) => (
                 <div
                   key={index}
-                  className={`indicator ${index === currentVideoIndex ? 'active' : ''} ${answeredQuestions[index] ? '' : 'disabled'}`}
+                  className={`indicator ${index === currentVideoIndex ? 'active' : ''}`}
                   onClick={() => {
                     setCurrentVideoIndex(index)
                   }}

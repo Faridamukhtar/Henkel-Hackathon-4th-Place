@@ -396,3 +396,21 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+/* Question card container width */
+.question-card {
+  width: 90%;
+  max-width: none;
+  margin-top: 10%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Layout container to push progress bar to the bottom */
+.card-and-progress {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+  justify-content: space-between;
+}
