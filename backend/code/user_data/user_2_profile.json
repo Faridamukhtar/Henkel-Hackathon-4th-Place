@@ -1,18 +1,18 @@
 {
   "quiz": {
-    "length": "Short",
+    "length": "Medium",
     "greasy_roots": true,
-    "split_ends": false,
-    "dryness": "somewhat dry",
-    "shine": "super shiny, almost reflective",
-    "colored": "Occasionally",
-    "heat": "Rarely"
+    "split_ends": true,
+    "dryness": "balanced",
+    "shine": "dull",
+    "colored": "Rarely",
+    "heat": "Never"
   },
   "image_analysis": "No image provided",
   "recommendation": {
     "recommended_line": "Oil Nutritive",
-    "reason": "This line provides nourishment for your somewhat dry hair, helping to maintain its health and existing shine and smoothness.",
-    "product_routine": "Shampoo + Conditioner",
-    "alternative": "Supreme Length"
+    "reason": "Your hair has visible split ends and dullness, which Gliss Oil Nutritive is formulated to nourish, add shine, and smoothness to.",
+    "product_routine": "Oil Nutritive Shampoo + Oil Nutritive Conditioner",
+    "alternative": "Supreme Length. While Gliss Supreme Length addresses greasy roots, Oil Nutritive is a better fit for your primary concerns of split ends and dullness, as Supreme Length is primarily for long hair."
   }
 }

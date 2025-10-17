@@ -1,5 +1,5 @@
 from gemini_client import model
-from retreiver import load_knowledge_base, retrieve_relevant_docs
+from retriever import load_knowledge_base, retrieve_relevant_docs
 import re
 
 def generate_final_prediction(image_analysis, quiz_data):

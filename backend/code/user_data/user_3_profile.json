@@ -1,18 +1,18 @@
 {
   "quiz": {
-    "length": "Short",
+    "length": "Medium",
     "greasy_roots": true,
-    "split_ends": false,
-    "dryness": "somewhat dry",
-    "shine": "super shiny, almost reflective",
+    "split_ends": true,
+    "dryness": "balanced",
+    "shine": "a little dull",
     "colored": "Occasionally",
-    "heat": "Occasionally"
+    "heat": "Rarely"
   },
   "image_analysis": "No image provided",
   "recommendation": {
-    "recommended_line": "Supreme Length",
-    "reason": "It addresses greasy roots and provides protection for the hair, which is otherwise healthy.",
-    "product_routine": "Supreme Length Shampoo + Supreme Length Conditioner",
-    "alternative": "Oil Nutritive"
+    "recommended_line": "Oil Nutritive",
+    "reason": "This line directly addresses your visible split ends and dullness, providing the nourishment needed to add shine and smoothness.",
+    "product_routine": "Oil Nutritive Shampoo + Oil Nutritive Conditioner + Oil Nutritive Mask",
+    "alternative": "Supreme Length. While primarily designed for long hair, it addresses your greasy roots."
   }
 }

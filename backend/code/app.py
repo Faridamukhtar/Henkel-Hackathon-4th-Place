@@ -21,7 +21,7 @@ from recommender import generate_final_prediction
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], 
+    allow_origins=["*"], 
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -44,9 +44,12 @@ async def analyze_and_recommend(
     """
     image_analysis = "No image provided"
 
-    # 1️⃣ Save and analyze uploaded image if present
+    print("Received quiz data JSON:", quiz_data_json)
+    print("Received file :", file)
+
     if file:
         image_path = f"user_data/{file.filename}"
+        print(f"Saving image to: {image_path}")
         with open(image_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         image_analysis = analyze_hair_image(image_path)
