@@ -79,7 +79,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
               {/* Question Header */}
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-stone-900">
-                  {currentQuestion + 1}/ {question}
+                  {question}
                 </h2>
                 <p className="text-sm text-stone-600">{subtitle}</p>
               </div>
@@ -117,7 +117,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-2 flex-1">
                 <h2 className="text-2xl font-bold text-stone-900">
-                  {currentQuestion}/ {question}
+                  {question}
                 </h2>
                 <p className="text-sm text-stone-600">
                   {subtitle || "Select one option that best describes you."}
