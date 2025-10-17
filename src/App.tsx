@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import  { useState, useEffect, useRef } from 'react'
 import { FaVolumeOff, FaVolumeUp } from 'react-icons/fa'
-import { motion, AnimatePresence } from 'framer-motion'
-import ProgressBar from './components/ProgressBar'
+import {AnimatePresence, motion} from 'framer-motion'
 import HairQuestionCard from './components/HairQuestionCard'
 import DetailsGuide from './components/DetailsGuide'
 import './App.css'
@@ -23,21 +22,29 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0)
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false)
   const videoRef = useRef<HTMLVideoElement>(null)
-  
-  const TOTAL_QUESTIONS = 7
+
 
   const questions = [
     "How long is your hair?",
-    "How often do you wash your hair?",
-    "Do you color your hair?",
-    "What is your main hair concern?",
+    "How often do you need to wash your hair because it gets oily?",
+    "When you look at your hair, do you usually notice split ends?",
+    "How would you describe your hair's overall moisture?",
+    "How would you describe your hair’s shine in sunlight",
+    "How often do you bleach/color your hair?",
+    "How often do you use heat styling tools (like flat irons, curling wands, blow dryers)?",
+    "Would you say your hair is completely healthy or slightly stressed?"
   ]
 
   const answers = [
     ["Short", "Medium", "Long"],
-    ["Daily", "2-3 times a week", "Weekly", "Less often"],
-    ["Yes, regularly", "Yes, occasionally", "No"],
-    ["Dryness", "Frizz", "Damage", "Oiliness"],
+    ["Every day", "Every 2–3 days", "Once a week"],
+    ["Yes","No"],
+    ["Very dry", "somewhat dry", "Balanced", "Moisturized"],
+    ["Super shiny, almost reflective", "A little dull", "dull", "I’m not sure"],
+    ["regularly", "occasionally", "rarely", "never"],
+    ["regularly", "occasionally", "rarely", "never"],
+    ["healthy", "slightly stressed", "severely stressed"],
+
   ]
 
   const handleQuestionClick = (index: number) => {
