@@ -1,4 +1,4 @@
-import  { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { FaVolumeOff, FaVolumeUp } from 'react-icons/fa'
 import {AnimatePresence, motion} from 'framer-motion'
 import HairQuestionCard from './components/HairQuestionCard'
@@ -22,17 +22,21 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0)
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false)
   const videoRef = useRef<HTMLVideoElement>(null)
-
-
+  const [length, setLength] = useState<string | null>(null)
+  const [greasiness, setGreasiness] = useState<string | null>(null)
+  const [splitEnds, setSplitEnds] = useState<string | null>(null)
+  const [dryness, setDryness] = useState<string | null>(null)
+  const [shine, setShine] = useState<string | null>(null)
+  const [colored, setColored] = useState<string | null>(null)
+  const [heatStyling, setHeatStyling] = useState<string | null>(null)
   const questions = [
     "How long is your hair?",
-    "How often do you need to wash your hair because it gets oily?",
+    "How soon after washing does your hair or scalp start to feel oily?",
     "When you look at your hair, do you usually notice split ends?",
     "How would you describe your hair's overall moisture?",
     "How would you describe your hair’s shine in sunlight",
     "How often do you bleach/color your hair?",
     "How often do you use heat styling tools (like flat irons, curling wands, blow dryers)?",
-    "Would you say your hair is completely healthy or slightly stressed?"
   ]
 
   const answers = [
@@ -43,9 +47,103 @@ function App() {
     ["Super shiny, almost reflective", "A little dull", "dull", "I’m not sure"],
     ["regularly", "occasionally", "rarely", "never"],
     ["regularly", "occasionally", "rarely", "never"],
-    ["healthy", "slightly stressed", "severely stressed"],
-
   ]
+
+  const subtitles = [
+    "Choose the length that best describes your hair.",
+    "Oily buildup frequency helps us understand your scalp type and sebum balance.",
+    "Split ends can indicate dryness and damage.",
+    "Moisture levels affect hair's elasticity and shine.",
+    "Shine reflects the health and hydration of your hair.",
+    "Frequent bleaching/coloring can lead to dryness and breakage.",
+    "Excessive heat styling can damage hair cuticles.",
+  ]
+
+  const selectedAnswers = [
+    length,
+    greasiness,
+    splitEnds,
+    dryness,
+    shine,
+    colored,
+    heatStyling
+  ]
+
+  const setters = [
+    setLength,
+    setGreasiness,
+    setSplitEnds,
+    setDryness,
+    setShine,
+    setColored,
+    setHeatStyling
+  ]
+
+  const handleSubmit = () => {
+    const hair_info: {
+      length?: string;
+      greasy_roots?: boolean;
+      split_ends?: boolean;
+      dryness?: "low" | "medium" | "high" | "severe";
+      shine?: "very shiny" | "moderately shiny" | "dull" | "very dull";
+      heat?: string;
+      colored?: string;
+    } = {};
+
+    // Q1: Hair Length
+    if (length != null)
+      hair_info.length = length.toLowerCase();
+
+    // Q2: Oiliness frequency → greasy_roots
+    hair_info.greasy_roots = greasiness === "Every day" || greasiness === "Every 2–3 days";
+
+    // Q3: Split ends
+    hair_info.split_ends = splitEnds === "Yes";
+
+    // Q4: Dryness mapping
+    switch (dryness) {
+      case "Very dry":
+        hair_info.dryness = "severe";
+        break;
+      case "somewhat dry":
+        hair_info.dryness = "high";
+        break;
+      case "Balanced":
+        hair_info.dryness = "medium";
+        break;
+      case "Moisturized":
+        hair_info.dryness = "low";
+        break;
+    }
+
+    // Q5: Shine mapping
+    switch (shine) {
+      case "Super shiny, almost reflective":
+        hair_info.shine = "very shiny";
+        break;
+      case "A little dull":
+        hair_info.shine = "moderately shiny";
+        break;
+      case "dull":
+        hair_info.shine = "dull";
+        break;
+      case "I’m not sure":
+        hair_info.shine = "moderately shiny";
+        break;
+    }
+
+    // Q6: Bleach/Color frequency
+    if (colored != null)
+      hair_info.colored = colored
+
+    // Q7: Heat styling frequency → damage
+    if (heatStyling != null)
+      hair_info.heat = heatStyling
+
+    return hair_info;
+  };
+
+
 
   const handleQuestionClick = (index: number) => {
     setCurrentQuestion(index)
@@ -163,6 +261,7 @@ function App() {
           <HairQuestionCard
             question={questions[currentQuestion]}
             answers={answers[currentQuestion]}
+            subtitle={subtitles[currentQuestion]}
             currentQuestion={currentQuestion + 1}
             totalQuestions={questions.length}
             onNext={() => {
@@ -172,6 +271,8 @@ function App() {
             }}
             onQuestionClick={handleQuestionClick}
             onMoreDetailsClick={handleMoreDetailsClick}
+            selectedAnswer={selectedAnswers[currentQuestion]}
+            setSelectedAnswer={setters[currentQuestion]}
           />
           
           {/* Details Modal */}

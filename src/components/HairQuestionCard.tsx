@@ -1,35 +1,38 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ProgressBar from './ProgressBar'
 import './HairQuestionCard.css'
 
 interface HairQuestionCardProps {
   question: string
   answers: string[]
+  subtitle?: string
   currentQuestion: number
   totalQuestions: number
   onNext?: () => void
   onQuestionClick?: (index: number) => void
   onMoreDetailsClick?: () => void
+  selectedAnswer: string | null
+  setSelectedAnswer: (answer: string) => void
 }
 
 const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
   question,
-  answers,
+  answers, subtitle,
   currentQuestion,
   totalQuestions,
   onNext,
   onQuestionClick,
   onMoreDetailsClick,
+    selectedAnswer,
+    setSelectedAnswer
 }) => {
-  const [selected, setSelected] = useState<string | null>(null)
 
   const handleSelect = (answer: string) => {
-    setSelected(answer)
+    setSelectedAnswer(answer)
   }
 
   const handleNext = () => {
-    if (selected && onNext) {
-      setSelected(null)
+    if (selectedAnswer && onNext) {
       onNext()
     }
   }
@@ -37,7 +40,6 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
   const handleQuestionClick = (index: number) => {
     if (onQuestionClick) {
       onQuestionClick(index)
-      setSelected(null)
     }
   }
 
@@ -45,11 +47,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
     const iconMap: { [key: string]: string } = {
       Short: "/assets/ShortHair.png",
       Medium: "/assets/MediumHair.png",
-      Long: "/assets/LongHair.png",
-      Straight: "👩‍🦰",
-      Wavy: "👩‍🦱", 
-      Curly: "👩‍🦱",
-      Coily: "👩‍🦱",
+      Long: "/assets/LongHair.png"
     }
     return iconMap[answer] || ""
   }
@@ -72,11 +70,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
                 {currentQuestion}/ {question}
               </h2>
               <p className="text-sm text-stone-600">
-                {question.includes("texture") && "Texture will help us understand the underlying needs of your hair."}
-                {question.includes("length") && "Hair length affects product recommendations and care routines."}
-                {question.includes("wash") && "Washing frequency helps us suggest the right formulation."}
-                {question.includes("color") && "Colored hair has different care needs."}
-                {question.includes("concern") && "Understanding your main concern helps us find the perfect solution."}
+                {subtitle || "Select one option that best describes you."}
               </p>
             </div>
             <button 
@@ -91,9 +85,9 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
           <div className="h-px bg-stone-200" />
 
           <div className="flex justify-center gap-4 answer-container">
-            {answers.map((answer, index) => {
-              const isSelected = selected === answer;
-              const hasSelection = selected !== null;
+            {answers.map((answer) => {
+              const isSelected = selectedAnswer === answer;
+              const hasSelection = selectedAnswer !== null;
               const isUnselected = hasSelection && !isSelected;
               
               return (
@@ -126,9 +120,9 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
           {/* Next Button */}
           <button
             onClick={handleNext}
-            disabled={!selected}
+            disabled={!selectedAnswer}
             className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
-              selected ? "next-button-enabled" : "next-button-disabled bg-stone-200 text-stone-400 cursor-not-allowed"
+              selectedAnswer ? "next-button-enabled" : "next-button-disabled bg-stone-200 text-stone-400 cursor-not-allowed"
             }`}
           >
             Next
