@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FaVolumeOff, FaVolumeUp } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import HairQuestionCard from "./components/HairQuestionCard";
 import DetailsGuide from "./components/DetailsGuide";
 import LandingPage from "./components/LandingPage";
 import "./App.css";
-
 interface Video {
   src: string;
 }
@@ -43,7 +42,7 @@ function App() {
     "How often do you use heat styling tools (like flat irons, curling wands, blow dryers)?",
   ];
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(
-      Array(questions.length).fill(false)
+    Array(questions.length).fill(false)
   );
   const answers = [
     ["Short", "Medium", "Long"],
@@ -85,7 +84,7 @@ function App() {
     setHeatStyling,
   ];
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const hair_info: {
       length?: string;
       greasy_roots?: boolean;
@@ -96,56 +95,44 @@ function App() {
       colored?: string;
     } = {};
 
-    // Q1: Hair Length
-    if (length != null) hair_info.length = length.toLowerCase();
+    // Populate hair_info from your state
+    if (length) hair_info.length = length;
+    if (greasiness) hair_info.greasy_roots = greasiness === "Every day" || greasiness === "Every 2–3 days";
+    if (splitEnds) hair_info.split_ends = splitEnds === "Yes";
+    if (dryness) hair_info.dryness = dryness.toLowerCase() as "low" | "medium" | "high" | "severe";
+    if (shine) hair_info.shine = shine.toLowerCase() as "very shiny" | "moderately shiny" | "dull" | "very dull";
+    if (colored) hair_info.colored = colored;
+    if (heatStyling) hair_info.heat = heatStyling;
 
-    // Q2: Oiliness frequency → greasy_roots
-    hair_info.greasy_roots =
-        greasiness === "Every day" || greasiness === "Every 2–3 days";
+    try {
+      const formData = new FormData();
 
-    // Q3: Split ends
-    hair_info.split_ends = splitEnds === "Yes";
+      // Append JSON data as a string
+      formData.append("quiz_data_json", JSON.stringify(hair_info));
 
-    // Q4: Dryness mapping
-    switch (dryness) {
-      case "Very dry":
-        hair_info.dryness = "severe";
-        break;
-      case "somewhat dry":
-        hair_info.dryness = "high";
-        break;
-      case "Balanced":
-        hair_info.dryness = "medium";
-        break;
-      case "Moisturized":
-        hair_info.dryness = "low";
-        break;
+      // Append image only if it exists
+      // if (capturedImage) {
+      //   formData.append("file", capturedImage, capturedImage.name);
+      // }
+
+      // Call your FastAPI endpoint
+      const response = await fetch("http://localhost:8000/analyze_and_recommend", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit data");
+      }
+
+      const result = await response.json();
+      console.log("API result:", result);
+      // Do something with the result (e.g., display recommendation)
+    } catch (error) {
+      console.error("Error submitting hair info:", error);
     }
-
-    // Q5: Shine mapping
-    switch (shine) {
-      case "Super shiny, almost reflective":
-        hair_info.shine = "very shiny";
-        break;
-      case "A little dull":
-        hair_info.shine = "moderately shiny";
-        break;
-      case "dull":
-        hair_info.shine = "dull";
-        break;
-      case "I’m not sure":
-        hair_info.shine = "moderately shiny";
-        break;
-    }
-
-    // Q6: Bleach/Color frequency
-    if (colored != null) hair_info.colored = colored;
-
-    // Q7: Heat styling frequency → damage
-    if (heatStyling != null) hair_info.heat = heatStyling;
-
-    return hair_info;
   };
+
 
   const handleQuestionClick = (index: number) => {
     const canJump = answeredQuestions.slice(1, index).every((ans) => ans);
@@ -227,159 +214,161 @@ function App() {
   }
 
   return (
-      <motion.div
-          className="App"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-      >
-        <div className="split-container">
-          {/* Left Side - Single Video Player */}
-          <div className="video-section" onClick={toggleMute}>
-            <div className="video-container">
-              <video
-                  ref={videoRef}
-                  autoPlay
-                  muted={isMuted}
-                  playsInline
-                  className="video-player"
-                  key={currentVideoIndex}
-              >
-                <source src={VIDEOS[currentVideoIndex].src} type="video/MP4" />
-                Your browser does not support the video tag.
-              </video>
-              <div className="video-overlay">
-                <div className="mute-indicator">
-                  {isMuted ? <FaVolumeOff /> : <FaVolumeUp />}
-                </div>
-              </div>
-              <div className="video-indicators">
-                {VIDEOS.map((_, index) => (
-                    <div
-                        key={index}
-                        className={`indicator ${
-                            index === currentVideoIndex ? "active" : ""
-                        }`}
-                        onClick={() => {
-                          setCurrentVideoIndex(index);
-                        }}
-                    />
-                ))}
+    <motion.div
+      className="App"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
+      <div className="split-container">
+        {/* Left Side - Single Video Player */}
+        <div className="video-section" onClick={toggleMute}>
+          <div className="video-container">
+            <video
+              ref={videoRef}
+              autoPlay
+              muted={isMuted}
+              playsInline
+              className="video-player"
+              key={currentVideoIndex}
+            >
+              <source src={VIDEOS[currentVideoIndex].src} type="video/MP4" />
+              Your browser does not support the video tag.
+            </video>
+            <div className="video-overlay">
+              <div className="mute-indicator">
+                {isMuted ? <FaVolumeOff /> : <FaVolumeUp />}
               </div>
             </div>
+            <div className="video-indicators">
+              {VIDEOS.map((_, index) => (
+                <div
+                  key={index}
+                  className={`indicator ${index === currentVideoIndex ? "active" : ""
+                    }`}
+                  onClick={() => {
+                    setCurrentVideoIndex(index);
+                  }}
+                />
+              ))}
+            </div>
           </div>
-
-          {/* Right Side - Quiz Area */}
-          <motion.div
-              className="quiz-section"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <motion.div
-                className="quiz-header"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.6 }}
-              >
-                For Every You
-              </motion.h2>
-              <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.8 }}
-              >
-                Every strand has a story — let's find the shampoo that gets yours.
-              </motion.p>
-            </motion.div>
-
-            {/* Hair Question Card */}
-            <HairQuestionCard
-                question={
-                  currentQuestion === 0
-                      ? "Let's start by capturing your face"
-                      : questions[currentQuestion - 1]
-                }
-                answers={currentQuestion === 0 ? [] : answers[currentQuestion - 1]}
-                subtitle={
-                  currentQuestion === 0
-                      ? "Position your face within the guide and capture a photo"
-                      : subtitles[currentQuestion - 1]
-                }
-                currentQuestion={currentQuestion} // Keep 0-based for internal logic
-                totalQuestions={questions.length + 1} // 7 questions + 1 face capture = 8 total steps
-                capturedImage={capturedImage}
-                showFaceCapture={true} // Enable face capture step in progress bar
-                onNext={() => {
-                  // Mark current question as answered
-                  const updated = [...answeredQuestions];
-                  if (currentQuestion > 0) {
-                    updated[currentQuestion - 1] = true;
-                  }
-                  setAnsweredQuestions(updated);
-
-                  // Move to next question if it exists
-                  if (currentQuestion < questions.length) {
-                    setCurrentQuestion(currentQuestion + 1);
-                  }
-                }}
-                onQuestionClick={handleQuestionClick}
-                onMoreDetailsClick={handleMoreDetailsClick}
-                selectedAnswer={
-                  currentQuestion === 0
-                      ? null
-                      : selectedAnswers[currentQuestion - 1]
-                }
-                setSelectedAnswer={
-                  currentQuestion === 0 ? () => {} : setters[currentQuestion - 1]
-                }
-                onFaceCapture={handleFaceCapture}
-                onFaceCaptureFile={handleFaceCaptureFile}
-                onSkipFaceCapture={handleSkipFaceCapture}
-                isFaceCaptureStep={currentQuestion === 0}
-            />
-
-            {/* Details Modal */}
-            <AnimatePresence>
-              {isDetailsModalOpen && (
-                  <motion.div
-                      className="modal-overlay"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      onClick={handleCloseModal}
-                  >
-                    <motion.div
-                        className="modal-content"
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 50 }}
-                        transition={{ duration: 0.3 }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="modal-header">
-                        <h3>Question Details</h3>
-                        <button className="close-button" onClick={handleCloseModal}>
-                          ×
-                        </button>
-                      </div>
-                      <DetailsGuide
-                          currentQuestion={currentQuestion}
-                          question={questions[currentQuestion]}
-                      />
-                    </motion.div>
-                  </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
         </div>
-      </motion.div>
+
+        {/* Right Side - Quiz Area */}
+        <motion.div
+          className="quiz-section"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <motion.div
+            className="quiz-header"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              For Every You
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+            >
+              Every strand has a story — let's find the shampoo that gets yours.
+            </motion.p>
+          </motion.div>
+
+          {/* Hair Question Card */}
+          <HairQuestionCard
+            question={
+              currentQuestion === 0
+                ? "Let's start by capturing your face"
+                : questions[currentQuestion - 1]
+            }
+            answers={currentQuestion === 0 ? [] : answers[currentQuestion - 1]}
+            subtitle={
+              currentQuestion === 0
+                ? "Position your face within the guide and capture a photo"
+                : subtitles[currentQuestion - 1]
+            }
+            currentQuestion={currentQuestion} // Keep 0-based for internal logic
+            totalQuestions={questions.length + 1} // 7 questions + 1 face capture = 8 total steps
+            capturedImage={capturedImage}
+            showFaceCapture={true} // Enable face capture step in progress bar
+            onNext={() => {
+              // Mark current question as answered
+              const updated = [...answeredQuestions];
+              if (currentQuestion > 0) {
+                updated[currentQuestion - 1] = true;
+              }
+              setAnsweredQuestions(updated);
+
+              // Move to next question if it exists
+              if (currentQuestion < questions.length) {
+                setCurrentQuestion(currentQuestion + 1);
+              }
+              else {
+                handleSubmit();
+              }
+            }}
+            onQuestionClick={handleQuestionClick}
+            onMoreDetailsClick={handleMoreDetailsClick}
+            selectedAnswer={
+              currentQuestion === 0
+                ? null
+                : selectedAnswers[currentQuestion - 1]
+            }
+            setSelectedAnswer={
+              currentQuestion === 0 ? () => { } : setters[currentQuestion - 1]
+            }
+            onFaceCapture={handleFaceCapture}
+            onFaceCaptureFile={handleFaceCaptureFile}
+            onSkipFaceCapture={handleSkipFaceCapture}
+            isFaceCaptureStep={currentQuestion === 0}
+          />
+
+          {/* Details Modal */}
+          <AnimatePresence>
+            {isDetailsModalOpen && (
+              <motion.div
+                className="modal-overlay"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                onClick={handleCloseModal}
+              >
+                <motion.div
+                  className="modal-content"
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 50 }}
+                  transition={{ duration: 0.3 }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="modal-header">
+                    <h3>Question Details</h3>
+                    <button className="close-button" onClick={handleCloseModal}>
+                      ×
+                    </button>
+                  </div>
+                  <DetailsGuide
+                    currentQuestion={currentQuestion}
+                    question={questions[currentQuestion]}
+                  />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </div>
+    </motion.div>
   );
 }
 

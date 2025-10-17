@@ -9,63 +9,71 @@ from gemini_client import analyze_hair_image
 from recommender import generate_final_prediction
 from chatbot import chat_with_user
 
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # change to your frontend origin in production
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 os.makedirs("user_data", exist_ok=True)
 
 user_profiles = {}
 
+
+
+from gemini_client import analyze_hair_image
+from recommender import generate_final_prediction
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"], 
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+os.makedirs("user_data", exist_ok=True)
+
+# In-memory storage
+user_profiles = {}
+
 @app.post("/analyze_and_recommend")
 async def analyze_and_recommend(
-    file: UploadFile = File(...),
+    file: UploadFile | None = File(None),
     quiz_data_json: str = Form(...)
 ):
     """
     Receives:
-    - file: the uploaded hair image
+    - file: optional uploaded hair image
     - quiz_data_json: JSON string with user attributes from frontend
     Returns:
     - JSON with recommendation and analysis
     """
-    # 1️⃣ Save uploaded image
-    image_path = f"user_data/{file.filename}"
-    with open(image_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    image_analysis = "No image provided"
 
-    # 2️⃣ Analyze image
-    image_analysis = analyze_hair_image(image_path)
+    # 1️⃣ Save and analyze uploaded image if present
+    if file:
+        image_path = f"user_data/{file.filename}"
+        with open(image_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        image_analysis = analyze_hair_image(image_path)
 
-    # 3️⃣ Parse quiz data
+    # 2️⃣ Parse quiz data
     try:
         quiz_data = json.loads(quiz_data_json)
     except json.JSONDecodeError:
         return JSONResponse({"error": "Invalid JSON for quiz data"}, status_code=400)
 
-    # 4️⃣ Generate recommendation using RAG
+    # 3️⃣ Generate recommendation
     final_output = generate_final_prediction(image_analysis, quiz_data)
 
-    # 5️⃣ Save user profile
+    # 4️⃣ Save user profile
+    user_id = file.filename if file else f"user_{len(user_profiles)+1}"
     user_profile = {
         "quiz": quiz_data,
         "image_analysis": image_analysis,
-        "recommendation": final_output # has multiple things inside 
+        "recommendation": final_output
     }
-
-    user_id = file.filename  # simple example user_id
     user_profiles[user_id] = user_profile
 
-    # Save to disk for persistence
+    # Save to disk
     with open(f"user_data/{user_id}_profile.json", "w") as f:
         json.dump(user_profile, f, indent=2)
 
-    # 6️⃣ Return structured response
+    # 5️⃣ Return response
     response = {
         "user_id": user_id,
         "image_analysis": image_analysis,

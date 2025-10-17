@@ -1,0 +1,18 @@
+{
+  "quiz": {
+    "length": "Short",
+    "greasy_roots": true,
+    "split_ends": true,
+    "dryness": "balanced",
+    "shine": "a little dull",
+    "colored": "Rarely",
+    "heat": "Occasionally"
+  },
+  "image_analysis": "No image provided",
+  "recommendation": {
+    "recommended_line": "Oil Nutritive",
+    "reason": "Your hair experiences visible split ends and dullness, and this line provides nourishment to add shine and smoothness.",
+    "product_routine": "Oil Nutritive Shampoo + Oil Nutritive Conditioner + Oil Nutritive Mask",
+    "alternative": ""
+  }
+}
