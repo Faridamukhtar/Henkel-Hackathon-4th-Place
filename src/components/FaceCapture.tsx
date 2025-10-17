@@ -379,7 +379,9 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
 
         {isLoading ? (
             <div className="loading-spinner">
-              <div className="spinner"></div>
+              <div className="aqua-spinner">
+                <img src="/assets/aqua.png" alt="Loading..." className="spinning-bottle" />
+              </div>
               <p>Loading camera and face detection...</p>
             </div>
         ) : (
