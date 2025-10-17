@@ -111,9 +111,10 @@ function App() {
       formData.append("quiz_data_json", JSON.stringify(hair_info));
 
       // Append image only if it exists
-      // if (capturedImage) {
-      //   formData.append("file", capturedImage, capturedImage.name);
-      // }
+      if (capturedImageFile) {
+        console.log("I have an image file to send:", capturedImageFile);
+        formData.append("file", capturedImageFile, capturedImageFile.name);
+      }
 
       // Call your FastAPI endpoint
       const response = await fetch("http://localhost:8000/analyze_and_recommend", {

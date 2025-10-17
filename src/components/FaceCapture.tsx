@@ -6,6 +6,7 @@ import "./FaceCapture.css";
 // Types
 interface FaceCaptureProps {
   onCapture?: (imageData: string) => void;
+  onCaptureFile?: (file: File) => void;
   onSkip?: () => void;
   onNext?: () => void;
   capturedImage?: string | null;
@@ -32,11 +33,12 @@ const FACE_SIZE_RATIO = { min: 0.05, max: 0.3 }; // Same ratios
 const VIDEO_TIMEOUT = 5000;
 
 const FaceCapture: React.FC<FaceCaptureProps> = ({
-                                                   onCapture,
-                                                   onSkip,
-                                                   onNext,
-                                                   capturedImage,
-                                                 }) => {
+  onCapture,
+  onCaptureFile,
+  onSkip,
+  onNext,
+  capturedImage,
+}) => {
   // Refs
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -46,7 +48,7 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [facePositionStatus, setFacePositionStatus] =
-      useState<FacePositionStatus>("none");
+    useState<FacePositionStatus>("none");
   const [hasCaptured, setHasCaptured] = useState<boolean>(false);
   const [showPreview, setShowPreview] = useState<boolean>(false);
 
@@ -69,15 +71,15 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
     const faceCenterY = yMin + height / 2;
 
     const isWithinGuide =
-        faceCenterX >= guideLeft &&
-        faceCenterX <= guideRight &&
-        faceCenterY >= guideTop &&
-        faceCenterY <= guideBottom;
+      faceCenterX >= guideLeft &&
+      faceCenterX <= guideRight &&
+      faceCenterY >= guideTop &&
+      faceCenterY <= guideBottom;
 
     // Check if face size is appropriate (must be smaller than or equal to guide)
     const faceSizeRatio = (width * height) / (canvasWidth * canvasHeight);
     const guideSizeRatio =
-        (guideWidth * guideHeight) / (canvasWidth * canvasHeight);
+      (guideWidth * guideHeight) / (canvasWidth * canvasHeight);
 
     // Face must be smaller than or equal to the guide size
     const isNotTooBig = faceSizeRatio <= guideSizeRatio;
@@ -87,15 +89,15 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
   }, []);
 
   const updateFacePositionStatus = useCallback(
-      (faces: Face[]) => {
-        if (faces.length === 0) {
-          setFacePositionStatus("none");
-        } else {
-          const isProperlyPositioned = faces.some(checkFacePosition);
-          setFacePositionStatus(isProperlyPositioned ? "positioned" : "detected");
-        }
-      },
-      [checkFacePosition]
+    (faces: Face[]) => {
+      if (faces.length === 0) {
+        setFacePositionStatus("none");
+      } else {
+        const isProperlyPositioned = faces.some(checkFacePosition);
+        setFacePositionStatus(isProperlyPositioned ? "positioned" : "detected");
+      }
+    },
+    [checkFacePosition]
   );
 
   // Camera setup
@@ -126,9 +128,9 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
       videoRef.current.onloadedmetadata = () => {
         if (!videoRef.current) return;
         videoRef.current
-            .play()
-            .then(() => setIsVideoReady(true))
-            .catch(console.error);
+          .play()
+          .then(() => setIsVideoReady(true))
+          .catch(console.error);
         videoRef.current.width = CANVAS_DIMENSIONS.width;
         videoRef.current.height = CANVAS_DIMENSIONS.height;
       };
@@ -138,7 +140,7 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
     } catch (err) {
       console.error("Camera setup error:", err);
       setError(
-          "Camera access denied. Please allow camera permissions and try again."
+        "Camera access denied. Please allow camera permissions and try again."
       );
       setIsLoading(false);
     }
@@ -151,11 +153,11 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
     try {
       await tf.setBackend("webgl");
       const model = await faceLandmarksDetection.createDetector(
-          faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh,
-          {
-            runtime: "tfjs",
-            refineLandmarks: true,
-          }
+        faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh,
+        {
+          runtime: "tfjs",
+          refineLandmarks: true,
+        }
       );
 
       setIsLoading(false);
@@ -165,8 +167,8 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
         if (!videoRef.current || !canvasRef.current) return;
 
         if (
-            videoRef.current.videoWidth === 0 ||
-            videoRef.current.videoHeight === 0
+          videoRef.current.videoWidth === 0 ||
+          videoRef.current.videoHeight === 0
         ) {
           animationFrameId = requestAnimationFrame(detect);
           return;
@@ -206,7 +208,7 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
       detect();
     } catch (err) {
       setError(
-          "Failed to load face detection model. Please refresh and try again."
+        "Failed to load face detection model. Please refresh and try again."
       );
       setIsLoading(false);
     }
@@ -253,8 +255,8 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
     if (!videoRef.current || !onCapture) return;
 
     if (
-        videoRef.current.videoWidth === 0 ||
-        videoRef.current.videoHeight === 0
+      videoRef.current.videoWidth === 0 ||
+      videoRef.current.videoHeight === 0
     ) {
       console.error("Video not ready for capture");
       return;
@@ -269,7 +271,23 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
 
     ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
     const imageData = canvas.toDataURL("image/jpeg", 0.8);
-
+    // console.log("image data", imageData)
+    try {
+      const arr = imageData.split(",");
+      const mimeMatch = arr[0].match(/:(.*?);/);
+      const mime = mimeMatch ? mimeMatch[1] : "image/jpeg";
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8 = new Uint8Array(n);
+      while (n--) {
+        u8[n] = bstr.charCodeAt(n);
+      }
+      const blob = new Blob([u8], { type: mime });
+      const file = new File([blob], "face.jpg", { type: mime });
+      if (onCaptureFile) onCaptureFile(file);
+    } catch (e) {
+      // swallow conversion errors
+    }
     onCapture(imageData);
     setHasCaptured(true);
     setShowPreview(true);
@@ -301,129 +319,129 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
     const config = statusConfig[facePositionStatus];
 
     return (
-        <div className={`face-status ${facePositionStatus}`}>
-          <div className={`status-indicator ${config.className}`}>
-            <span className="status-icon">{config.icon}</span>
-            <span className="status-text">{config.text}</span>
-          </div>
+      <div className={`face-status ${facePositionStatus}`}>
+        <div className={`status-indicator ${config.className}`}>
+          <span className="status-icon">{config.icon}</span>
+          <span className="status-text">{config.text}</span>
         </div>
+      </div>
     );
   };
 
   // Error component
   if (error) {
     return (
-        <div className="face-capture-container">
-          <div className="error-message">
-            <p>{error}</p>
-            <div className="error-actions">
-              <button className="retry-button" onClick={handleRetry}>
-                Try Again
+      <div className="face-capture-container">
+        <div className="error-message">
+          <p>{error}</p>
+          <div className="error-actions">
+            <button className="retry-button" onClick={handleRetry}>
+              Try Again
+            </button>
+            {onSkip && (
+              <button className="skip-button" onClick={onSkip}>
+                Skip
               </button>
-              {onSkip && (
-                  <button className="skip-button" onClick={onSkip}>
-                    Skip
-                  </button>
-              )}
-            </div>
+            )}
           </div>
         </div>
+      </div>
     );
   }
 
   return (
-      <div className="face-capture-container">
-        {showPreview && capturedImage ? (
-            <div className="camera-rectangle">
-              <img
-                  src={capturedImage}
-                  alt="Captured face"
-                  className="captured-image"
-              />
-            </div>
-        ) : (
-            <div className="camera-rectangle">
-              <video
-                  ref={videoRef}
-                  className="face-capture-video"
-                  width={CANVAS_DIMENSIONS.width}
-                  height={CANVAS_DIMENSIONS.height}
-                  autoPlay
-                  muted
-                  playsInline
-              />
-              <canvas ref={canvasRef} className="face-detection-canvas" />
+    <div className="face-capture-container">
+      {showPreview && capturedImage ? (
+        <div className="camera-rectangle">
+          <img
+            src={capturedImage}
+            alt="Captured face"
+            className="captured-image"
+          />
+        </div>
+      ) : (
+        <div className="camera-rectangle">
+          <video
+            ref={videoRef}
+            className="face-capture-video"
+            width={CANVAS_DIMENSIONS.width}
+            height={CANVAS_DIMENSIONS.height}
+            autoPlay
+            muted
+            playsInline
+          />
+          <canvas ref={canvasRef} className="face-detection-canvas" />
 
-              {!isLoading && !isVideoReady && (
-                  <div className="video-fallback">Camera not available</div>
+          {!isLoading && !isVideoReady && (
+            <div className="video-fallback">Camera not available</div>
+          )}
+
+          <div className="face-avatar-guide">
+            <div className="avatar-outline">
+              <div className="avatar-eyes">
+                <div className="eye left-eye"></div>
+                <div className="eye right-eye"></div>
+              </div>
+              <div className="avatar-nose"></div>
+              <div className="avatar-mouth"></div>
+              <div className="guide-lines">
+                <div className="guide-line top"></div>
+                <div className="guide-line bottom"></div>
+              </div>
+            </div>
+          </div>
+
+          <StatusIndicator />
+        </div>
+      )}
+
+      {isLoading ? (
+        <div className="loading-spinner">
+          <div className="aqua-spinner">
+            <img src="/assets/aqua.png" alt="Loading..." className="spinning-bottle" />
+          </div>
+          <p>Loading camera and face detection...</p>
+        </div>
+      ) : (
+        <div className="capture-controls">
+          {showPreview && capturedImage ? (
+            <>
+              <button className="capture-button ready" onClick={handleRetry}>
+                Retry
+              </button>
+              {onNext && (
+                <button className="skip-button" onClick={onNext}>
+                  Next
+                </button>
               )}
-
-              <div className="face-avatar-guide">
-                <div className="avatar-outline">
-                  <div className="avatar-eyes">
-                    <div className="eye left-eye"></div>
-                    <div className="eye right-eye"></div>
-                  </div>
-                  <div className="avatar-nose"></div>
-                  <div className="avatar-mouth"></div>
-                  <div className="guide-lines">
-                    <div className="guide-line top"></div>
-                    <div className="guide-line bottom"></div>
-                  </div>
-                </div>
-              </div>
-
-              <StatusIndicator />
-            </div>
-        )}
-
-        {isLoading ? (
-            <div className="loading-spinner">
-              <div className="aqua-spinner">
-                <img src="/assets/aqua.png" alt="Loading..." className="spinning-bottle" />
-              </div>
-              <p>Loading camera and face detection...</p>
-            </div>
-        ) : (
-            <div className="capture-controls">
-              {showPreview && capturedImage ? (
-                  <>
-                    <button className="capture-button ready" onClick={handleRetry}>
-                      Retry
-                    </button>
-                    {onNext && (
-                        <button className="skip-button" onClick={onNext}>
-                          Next
-                        </button>
-                    )}
-                  </>
+            </>
+          ) : (
+            <>
+              {facePositionStatus === "positioned" ? (
+                <button
+                  className="capture-button ready"
+                  onClick={handleCapture}
+                >
+                  📸 Capture Photo
+                </button>
               ) : (
-                  <>
-                    {facePositionStatus === "positioned" ? (
-                        <button
-                            className="capture-button ready"
-                            onClick={handleCapture}
-                        >
-                          📸 Capture Photo
-                        </button>
-                    ) : (
-                        <div className="capture-button disabled">
-                          📸{" "}
-                          {facePositionStatus === "none"
-                              ? "Face not detected"
-                              : "Fit your face within the guide"}
-                        </div>
-                    )}
-                    {onSkip && (
-                        <button className="skip-button" onClick={onSkip}>
-                          Skip this step
-                        </button>
-                    )}
-                  </>
+                <div className="capture-button disabled">
+                  📸{" "}
+                  {facePositionStatus === "none"
+                    ? "Face not detected"
+                    : "Fit your face within the guide"}
+                </div>
               )}
-            </div>
-        )}
-      </div>
+              {onSkip && (
+                <button className="skip-button" onClick={onSkip}>
+                  Skip this step
+                </button>
+              )}
+            </>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 
