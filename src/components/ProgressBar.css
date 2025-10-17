@@ -1,0 +1,116 @@
+/* Progress Bar */
+.progress-container {
+  margin-top: auto;
+  padding: 2rem 0;
+}
+
+.progress-track {
+  position: relative;
+  height: 4px;
+  background: #e9ecef;
+  border-radius: 2px;
+  margin-bottom: 1.5rem;
+  overflow: visible;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1B1B1B 0%, #4D3A2C 100%);
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-dots {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: -14px;
+  left: 0;
+  right: 0;
+  height: 32px;
+  z-index: 3;
+}
+
+.progress-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 4;
+  border: 3px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.progress-dot:hover {
+  transform: scale(1.1);
+}
+
+.progress-dot.completed {
+  background: linear-gradient(135deg, #1B1B1B 0%, #4D3A2C 100%);
+  border-color: #1B1B1B;
+  box-shadow: 0 4px 12px rgba(27, 27, 27, 0.3);
+}
+
+.progress-dot.current {
+  background: #1B1B1B;
+  border-color: #1B1B1B;
+  box-shadow: 0 0 0 4px rgba(27, 27, 27, 0.2), 0 4px 12px rgba(27, 27, 27, 0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(27, 27, 27, 0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(27, 27, 27, 0.1); }
+}
+
+.dot-inner {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  transition: all 0.3s ease;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.progress-dot:not(.completed) .dot-inner {
+  color: #6c757d;
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.question-counter {
+  font-weight: 500;
+}
+
+.progress-percentage {
+  font-weight: 600;
+  color: #1B1B1B;
+}

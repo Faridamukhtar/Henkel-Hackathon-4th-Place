@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { FaVolumeOff, FaVolumeUp } from 'react-icons/fa'
+import { motion, AnimatePresence } from 'framer-motion'
+import ProgressBar from './components/ProgressBar'
 import './App.css'
 
 interface Video {
@@ -16,7 +18,10 @@ const VIDEOS: Video[] = [
 function App() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0)
   const [isMuted, setIsMuted] = useState<boolean>(true)
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0)
   const videoRef = useRef<HTMLVideoElement>(null)
+  
+  const TOTAL_QUESTIONS = 7
 
   useEffect(() => {
     const video = videoRef.current
@@ -47,10 +52,18 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <motion.div 
+      className="App"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
       <div className="split-container">
         {/* Left Side - Single Video Player */}
-        <div className="video-section" onClick={toggleMute}>
+        <div 
+          className="video-section" 
+          onClick={toggleMute}
+        >
           <div className="video-container">
             <video 
               ref={videoRef}
@@ -81,14 +94,43 @@ function App() {
         </div>
 
         {/* Right Side - Quiz Area */}
-        <div className="quiz-section">
-          <div className="quiz-header">
-            <h2>For Every You</h2>
-            <p>Every strand has a story — let's find the shampoo that gets yours.</p>
-          </div>
-        </div>
+        <motion.div 
+          className="quiz-section"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <motion.div 
+            className="quiz-header"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              For Every You
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+            >
+              Every strand has a story — let's find the shampoo that gets yours.
+            </motion.p>
+          </motion.div>
+          
+          {/* Progress Bar */}
+          <ProgressBar 
+            currentQuestion={currentQuestion}
+            totalQuestions={TOTAL_QUESTIONS}
+            onQuestionClick={setCurrentQuestion}
+          />
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
