@@ -120,9 +120,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
           <button className="restart-button" onClick={onRestart}>
             Take Quiz Again
           </button>
-          <button className="share-button">
-            Share Results
-          </button>
+
         </div>
       </div>
     </div>
