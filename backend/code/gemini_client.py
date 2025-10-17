@@ -4,10 +4,18 @@ from PIL import Image
 genai.configure(api_key="AIzaSyAdQomLWtUhRt_AMmIDObnZdrF_lP7T0kM")
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-def analyze_hair_image(image_path):
+def analyze_hair_image(image_path, max_chars=100):
     image = Image.open(image_path)
+    prompt = f"Analyze this photo and describe the hair condition (dryness, shine, frizz, split ends, visible damage). Be concise and summarize in no more than {max_chars} characters."
+    
     response = model.generate_content([
-        "Analyze this photo and describe the hair condition (dryness, shine, frizz, split ends, and visible damage).",
+        prompt,
         image
     ])
-    return response.text
+    
+    # Ensure strict character limit
+    text = response.text
+    if len(text) > max_chars:
+        text = text[:max_chars]
+    
+    return text
