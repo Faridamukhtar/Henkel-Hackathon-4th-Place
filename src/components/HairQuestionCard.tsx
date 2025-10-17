@@ -123,12 +123,6 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
                   {subtitle || "Select one option that best describes you."}
                 </p>
               </div>
-              <button
-                  onClick={onMoreDetailsClick}
-                  className="more-details-button"
-              >
-                <span className="button-text">More details</span>
-              </button>
             </div>
 
             {/* Divider */}
