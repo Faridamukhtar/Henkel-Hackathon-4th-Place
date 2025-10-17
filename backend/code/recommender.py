@@ -39,7 +39,7 @@ Given the user's hair profile, select the most suitable Gliss line.
 Focus on the case where user has long damaged hair to mix the shampoo and mask lines.
 Always provide a suggested routine with shampoo, conditioner, and mask (if available). Never leave it empty.
 Do not use any formatting such as **, *, _, or markdown. Output plain text only.
-
+Recommended Line has to be one of the five lines above spelled in the same exact way with same spacing
 Output in this structure:
 
 Recommended line: <name>
