@@ -9,6 +9,7 @@ interface HairQuestionCardProps {
   totalQuestions: number
   onNext?: () => void
   onQuestionClick?: (index: number) => void
+  onMoreDetailsClick?: () => void
 }
 
 const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
@@ -18,6 +19,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
   totalQuestions,
   onNext,
   onQuestionClick,
+  onMoreDetailsClick,
 }) => {
   const [selected, setSelected] = useState<string | null>(null)
 
@@ -41,12 +43,19 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
 
   const getIconForAnswer = (answer: string) => {
     const iconMap: { [key: string]: string } = {
+      Short: "/assets/ShortHair.png",
+      Medium: "/assets/MediumHair.png",
+      Long: "/assets/LongHair.png",
       Straight: "👩‍🦰",
       Wavy: "👩‍🦱", 
       Curly: "👩‍🦱",
       Coily: "👩‍🦱",
     }
-    return iconMap[answer] || "✨"
+    return iconMap[answer] || ""
+  }
+
+  const isImageIcon = (answer: string) => {
+    return ["Short", "Medium", "Long"].includes(answer)
   }
 
   return (
@@ -70,29 +79,48 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
                 {question.includes("concern") && "Understanding your main concern helps us find the perfect solution."}
               </p>
             </div>
-            <a href="#" className="text-sm font-medium text-stone-900 underline whitespace-nowrap hover:text-stone-700">
-              More details
-            </a>
+            <button 
+              onClick={onMoreDetailsClick}
+              className="more-details-button"
+            >
+              <span className="button-text">More details</span>
+            </button>
           </div>
 
           {/* Divider */}
           <div className="h-px bg-stone-200" />
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {answers.map((answer) => (
-              <button
-                key={answer}
-                onClick={() => handleSelect(answer)}
-                className={`flex flex-col items-center justify-center p-6 rounded-2xl border-2 transition-all ${
-                  selected === answer
-                    ? "bg-stone-900 text-white border-stone-900"
-                    : "bg-white text-stone-900 border-stone-300 hover:border-stone-900"
-                }`}
-              >
-                <div className="text-4xl mb-3">{getIconForAnswer(answer)}</div>
+          <div className="flex justify-center gap-4 answer-container">
+            {answers.map((answer, index) => {
+              const isSelected = selected === answer;
+              const hasSelection = selected !== null;
+              const isUnselected = hasSelection && !isSelected;
+              
+              return (
+                <button
+                  key={answer}
+                  onClick={() => handleSelect(answer)}
+                  className={`answer-button flex flex-col items-center justify-center p-6 rounded-2xl transition-all ${
+                    isSelected
+                      ? "selected bg-white text-stone-900 border-stone-900 border-4"
+                      : isUnselected
+                      ? "unselected bg-white text-stone-900 border-stone-400 border-2 hover:border-stone-600"
+                      : "bg-white text-stone-900 border-stone-400 border-2 hover:border-stone-600"
+                  }`}
+                >
+                {isImageIcon(answer) && (
+                  <div className="text-4xl mb-3">
+                    <img 
+                      src={getIconForAnswer(answer)} 
+                      alt={answer}
+                      className="w-12 h-12 object-contain"
+                    />
+                  </div>
+                )}
                 <span className="text-sm font-medium text-center">{answer}</span>
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </div>
 
           {/* Next Button */}
@@ -100,7 +128,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
             onClick={handleNext}
             disabled={!selected}
             className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
-              selected ? "bg-stone-900 text-white hover:bg-stone-800" : "bg-stone-200 text-stone-400 cursor-not-allowed"
+              selected ? "next-button-enabled" : "next-button-disabled bg-stone-200 text-stone-400 cursor-not-allowed"
             }`}
           >
             Next

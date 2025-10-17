@@ -3,6 +3,7 @@ import { FaVolumeOff, FaVolumeUp } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
 import ProgressBar from './components/ProgressBar'
 import HairQuestionCard from './components/HairQuestionCard'
+import DetailsGuide from './components/DetailsGuide'
 import './App.css'
 
 interface Video {
@@ -20,6 +21,7 @@ function App() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0)
   const [isMuted, setIsMuted] = useState<boolean>(true)
   const [currentQuestion, setCurrentQuestion] = useState<number>(0)
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   
   const TOTAL_QUESTIONS = 7
@@ -32,7 +34,7 @@ function App() {
   ]
 
   const answers = [
-    ["Short", "Medium ", "Long"],
+    ["Short", "Medium", "Long"],
     ["Daily", "2-3 times a week", "Weekly", "Less often"],
     ["Yes, regularly", "Yes, occasionally", "No"],
     ["Dryness", "Frizz", "Damage", "Oiliness"],
@@ -40,6 +42,14 @@ function App() {
 
   const handleQuestionClick = (index: number) => {
     setCurrentQuestion(index)
+  }
+
+  const handleMoreDetailsClick = () => {
+    setIsDetailsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsDetailsModalOpen(false)
   }
 
   useEffect(() => {
@@ -125,6 +135,7 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
+            
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -153,7 +164,45 @@ function App() {
               }
             }}
             onQuestionClick={handleQuestionClick}
+            onMoreDetailsClick={handleMoreDetailsClick}
           />
+          
+          {/* Details Modal */}
+          <AnimatePresence>
+            {isDetailsModalOpen && (
+              <motion.div
+                className="modal-overlay"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                onClick={handleCloseModal}
+              >
+                <motion.div
+                  className="modal-content"
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 50 }}
+                  transition={{ duration: 0.3 }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="modal-header">
+                    <h3>Question Details</h3>
+                    <button 
+                      className="close-button"
+                      onClick={handleCloseModal}
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <DetailsGuide
+                    currentQuestion={currentQuestion}
+                    question={questions[currentQuestion]}
+                  />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       </div>
     </motion.div>
