@@ -6,33 +6,29 @@ interface Video {
   src: string
 }
 
+const VIDEOS: Video[] = [
+  { src: '/assets/influencer1.MP4' },
+  { src: '/assets/influencer2.MP4' },
+  { src: '/assets/influencer3.MP4' },
+  { src: '/assets/influencer4.MP4' }
+]
+
 function App() {
-  const [currentQuizStep, setCurrentQuizStep] = useState<number>(0)
   const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0)
   const [isMuted, setIsMuted] = useState<boolean>(true)
   const videoRef = useRef<HTMLVideoElement>(null)
-
-  const videos: Video[] = [
-    { src: '/assets/influencer1.MP4'  },
-    { src: '/assets/influencer2.MP4' },
-    { src: '/assets/influencer3.MP4'  },
-    { src: '/assets/influencer4.MP4'  }
-  ]
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
     const handleVideoEnd = () => {
-      setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % videos.length)
+      setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % VIDEOS.length)
     }
 
     video.addEventListener('ended', handleVideoEnd)
-    
-    return () => {
-      video.removeEventListener('ended', handleVideoEnd)
-    }
-  }, [videos.length])
+    return () => video.removeEventListener('ended', handleVideoEnd)
+  }, [])
 
   useEffect(() => {
     const video = videoRef.current
@@ -54,7 +50,7 @@ function App() {
     <div className="App">
       <div className="split-container">
         {/* Left Side - Single Video Player */}
-        <div className="video-section">
+        <div className="video-section" onClick={toggleMute}>
           <div className="video-container">
             <video 
               ref={videoRef}
@@ -64,20 +60,16 @@ function App() {
               className="video-player"
               key={currentVideoIndex}
             >
-              <source src={videos[currentVideoIndex].src} type="video/MP4" />
+              <source src={VIDEOS[currentVideoIndex].src} type="video/MP4" />
               Your browser does not support the video tag.
             </video>
             <div className="video-overlay">
-              <button 
-                className="mute-button"
-                onClick={toggleMute}
-                aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-              >
+              <div className="mute-indicator">
                 {isMuted ? <FaVolumeOff /> : <FaVolumeUp />}
-              </button>
+              </div>
             </div>
             <div className="video-indicators">
-              {videos.map((_, index) => (
+              {VIDEOS.map((_, index) => (
                 <div 
                   key={index}
                   className={`indicator ${index === currentVideoIndex ? 'active' : ''}`}
@@ -90,14 +82,13 @@ function App() {
 
         {/* Right Side - Quiz Area */}
         <div className="quiz-section">
-          <div className="quiz-container">
-            <h2>Hair Type Assessment</h2>
-            <p>Discover your perfect hair care routine</p>
-            
-           </div>
+          <div className="quiz-header">
+            <h2>For Every You</h2>
+            <p>Every strand has a story — let's find the shampoo that gets yours.</p>
+          </div>
+        </div>
       </div>
     </div>
-    </div> 
   )
 }
 
