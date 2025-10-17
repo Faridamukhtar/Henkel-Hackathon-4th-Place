@@ -1,0 +1,18 @@
+{
+  "quiz": {
+    "length": "Long",
+    "greasy_roots": true,
+    "split_ends": true,
+    "dryness": "somewhat dry",
+    "shine": "a little dull",
+    "colored": "Rarely",
+    "heat": "Occasionally"
+  },
+  "image_analysis": "No image provided",
+  "recommendation": {
+    "recommended_line": "Supreme Length",
+    "reason": "This line is specifically designed for long hair with possibly greasy roots, which matches your hair type. It also provides protection and is suitable for long hair that is somewhat damaged, addressing your split ends, dryness, and dullness.",
+    "product_routine": "Supreme Length Shampoo + Supreme Length Conditioner",
+    "alternative": "Oil Nutritive \u2014 This line would deeply nourish your hair, directly targeting your visible split ends, dryness, and dullness to add shine and smoothness. However, it does not specifically address greasy roots."
+  }
+}

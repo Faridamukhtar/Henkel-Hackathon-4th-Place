@@ -1,66 +1,86 @@
-from gemini_client import model
-from retriever import load_knowledge_base, retrieve_relevant_docs
+from groq import Groq
 import re
 
-def generate_final_prediction(image_analysis, quiz_data):
-    """
-    Generate a structured Gliss recommendation with enforced fields:
-    - Recommended line
-    - Reason
-    - Product routine
-    - Alternative (optional)
-    """
+# Initialize Groq client
+client = Groq(api_key="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")
 
-    # Load knowledge base
-    docs, embeddings = load_knowledge_base()
+GLISS_SYSTEM_PROMPT = """
+You are a professional hair-care expert who specializes in Schwarzkopf Gliss products.
+Your task is to recommend the most suitable Gliss shampoo line (and its matching conditioner and mask, if applicable) for a user based on their hair condition.
 
-    # 1️⃣ Build initial query
-    query = f"""
-Hair characteristics: {quiz_data}
-Image analysis: {image_analysis}
-Find which Gliss line best fits this combination.
+Available Gliss lines:
+
+1. Aqua Revive — provides MOISTURE.
+   • For normal to slightly dry hair needing light hydration.
+   • Ideal for low-dryness, healthy hair that just needs moisture refresh.
+
+2. Supreme Length — provides PROTECTION.
+   • For long hair with possibly greasy roots and generally healthy lengths.
+   • Also suitable for long hair that is somewhat damaged.
+   • If hair is very damaged but long, recommend Supreme Length plus the Ultimate Repair Mask.
+   • It doesn't have a mask product.
+
+3. Ultimate Repair — provides STRENGTH.
+   • For severely damaged, bleached, colored, or heat-treated hair.
+   • Strongest repairing formula.
+
+4. Total Repair — provides REGENERATION.
+   • For moderately damaged or stressed hair that needs restoration but not heavy repair.
+   • Second strongest after Ultimate Repair.
+
+5. Oil Nutritive — provides NOURISHMENT.
+   • For brittle, dull hair with visible split ends.
+   • Adds shine and smoothness.
+
+Each line has three products (Shampoo, Conditioner, Mask) except Supreme Length, which has no mask.
+
+Instructions:
+Given the user's hair profile and image analysis, select the most suitable Gliss line.
+If two lines are appropriate, list both and briefly explain when to use each.
+Focus on the case where user has long damaged hair to mix the shampoo and mask lines.
+
+Output in this structure:
+
+Recommended line: <name>
+Reason: <short explanation>
+Product routine: <Shampoo + Conditioner + Mask (if available)>
+Alternative: <optional second line + reason>
 """
 
-    # 2️⃣ Retrieve relevant docs
-    relevant_docs = retrieve_relevant_docs(query, docs, embeddings, top_k=2)
-    joined_docs = "\n\n".join(relevant_docs)
+def generate_final_prediction(hair_info, image_analysis):
+    """
+    Generate a structured Gliss recommendation using Groq LLM directly,
+    considering both hair quiz info and image analysis.
+    """
+    # 1️⃣ Create the chat completion
+    completion = client.chat.completions.create(
+        model="openai/gpt-oss-120b",
+        messages=[
+            {"role": "system", "content": GLISS_SYSTEM_PROMPT},
+            {
+                "role": "user",
+                "content": (
+                    f"My hair information is: {hair_info}.\n"
+                    f"My hair image analysis is: {image_analysis}.\n"
+                    "Based on both, which Gliss line should I use?"
+                )
+            }
+        ],
+        temperature=0.8,
+        max_completion_tokens=512,
+        top_p=1,
+        stream=False,  # set True if you want streaming output
+    )
 
-    # 3️⃣ Construct prompt with strict structure
-    prompt = f"""
-You are GlissBot, a professional haircare expert.
+    # 2️⃣ Extract the text response
+    text = completion.choices[0].message.content.strip()
 
-Use the following knowledge and user information to make a recommendation.
-
-Knowledge base:
-{joined_docs}
-
-Hair quiz answers:
-{quiz_data}
-
-Image analysis:
-{image_analysis}
-
-Provide your response in **this exact format** and nothing else where the recommended line only has the shampoo name:
-
-Recommended line: <name of Gliss line>
-Reason: <short explanation why this line suits the user>
-Product routine: <Shampoo + Conditioner + Mask if applicable>
-Alternative: <optional alternative line and reason>
-
-Do not add anything else.
-"""
-
-    # 4️⃣ Generate response
-    response = model.generate_content(prompt)
-    text = response.text.strip()
-
-    # 5️⃣ Parse structured fields using regex
+    # 3️⃣ Parse structured fields using regex
     line_match = re.search(r"Recommended line:\s*(.*)", text, re.IGNORECASE)
     reason_match = re.search(r"Reason:\s*(.*)", text, re.IGNORECASE)
     routine_match = re.search(r"Product routine:\s*(.*)", text, re.IGNORECASE)
     alternative_match = re.search(r"Alternative:\s*(.*)", text, re.IGNORECASE)
 
-    # 6️⃣ Build structured dictionary
     recommendation = {
         "recommended_line": line_match.group(1).strip() if line_match else None,
         "reason": reason_match.group(1).strip() if reason_match else None,

@@ -1,18 +1,18 @@
 {
   "quiz": {
-    "length": "Medium",
-    "greasy_roots": false,
+    "length": "Long",
+    "greasy_roots": true,
     "split_ends": true,
-    "dryness": "somewhat dry",
-    "shine": "a little dull",
-    "colored": "Rarely",
+    "dryness": "somewhat dry or frizzy",
+    "shine": "slightly dull",
+    "colored": "Occasionally",
     "heat": "Occasionally"
   },
   "image_analysis": "No image provided",
   "recommendation": {
-    "recommended_line": "Oil Nutritive",
-    "reason": "Your hair quiz indicates split ends, dullness, and dryness, which are directly addressed by the Oil Nutritive line for nourishment, shine, and smoothness.",
-    "product_routine": "Oil Nutritive Shampoo + Oil Nutritive Conditioner",
-    "alternative": "Supreme Length"
+    "recommended_line": "**\u202fSupreme\u202fLength\u202f+\u202fUltimate\u202fRepair\u202fMask",
+    "reason": "**\u202fYour hair is long with greasy roots, split ends, and shows signs of occasional colour/heat stress. Supreme\u202fLength is formulated to protect long strands and balance oily roots while keeping the length healthy. Because the hair also shows moderate\u2011to\u2011severe damage (dry/frizzy, dull, split ends), adding the **Ultimate Repair** mask supplies the strongest strengthening and rebuilding treatment that the Supreme\u202fLength line alone cannot provide (it has no mask).",
+    "product_routine": "**",
+    "alternative": "**\u202f**Total\u202fRepair** line (Shampoo\u202f+\u202fConditioner\u202f+\u202fMask)"
   }
 }
