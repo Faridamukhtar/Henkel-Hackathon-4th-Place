@@ -35,9 +35,10 @@ Available Gliss lines:
 Each line has three products (Shampoo, Conditioner, Mask) except Supreme Length, which has no mask.
 
 Instructions:
-Given the user's hair profile and image analysis, select the most suitable Gliss line.
-If two lines are appropriate, list both and briefly explain when to use each.
+Given the user's hair profile, select the most suitable Gliss line.
 Focus on the case where user has long damaged hair to mix the shampoo and mask lines.
+Always provide a suggested routine with shampoo, conditioner, and mask (if available). Never leave it empty.
+Do not use any formatting such as **, *, _, or markdown. Output plain text only.
 
 Output in this structure:
 
@@ -82,10 +83,11 @@ def generate_final_prediction(hair_info, image_analysis):
     alternative_match = re.search(r"Alternative:\s*(.*)", text, re.IGNORECASE)
 
     recommendation = {
-        "recommended_line": line_match.group(1).strip() if line_match else None,
-        "reason": reason_match.group(1).strip() if reason_match else None,
-        "product_routine": routine_match.group(1).strip() if routine_match else None,
-        "alternative": alternative_match.group(1).strip() if alternative_match else None
-    }
+    "recommended_line": line_match.group(1).replace("**", "").strip() if line_match else None,
+    "reason": reason_match.group(1).replace("**", "").strip() if reason_match else None,
+    "product_routine": routine_match.group(1).replace("**", "").strip() if routine_match else None,
+    "alternative": alternative_match.group(1).replace("**", "").strip() if alternative_match else None
+}
+
 
     return recommendation
