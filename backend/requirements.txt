@@ -1,0 +1,17 @@
+# Core Python libraries (already in stdlib)
+# json is included by default
+
+# Sentence Transformers and PyTorch for embeddings and similarity search
+torch>=2.2.0
+sentence-transformers>=2.2.2
+faiss-cpu>=1.7.4  # If you want FAISS for fast similarity search
+
+# Gemini / Google Generative AI
+google-generativeai>=0.1.0
+
+# Optional: for image handling if you later add image input
+Pillow>=10.0.0
+requests>=2.31.0
+
+# Pretty printing / optional enhancements
+rich>=13.5.0

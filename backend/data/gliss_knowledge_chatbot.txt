@@ -1,0 +1,67 @@
+[
+  {
+    "product_name": "Aqua Revive",
+    "primary_function": "Provides MOISTURE",
+    "ideal_hair_profile": "Normal to slightly dry hair. Best for healthy hair that just needs a lightweight hydration refresh and is prone to being weighed down.",
+    "core_philosophy": "Delivers a burst of pure, weightless hydration to quench thirsty hair without the use of heavy oils or butters. It's the 'glass of water' for your hair.",
+    "key_ingredients": [
+      {"name": "Marine Algae", "effect": "Hydrates the hair fiber and helps restore a healthy, natural moisture balance."},
+      {"name": "Hyaluron Complex", "effect": "Draws hydration into the hair and seals the cuticle to prevent moisture loss throughout the day."}
+    ],
+    "nutrient_mineral_profile": "Vitamin-rich formula. Does not contain heavy repairing minerals; focuses on pure hydration.",
+    "sensory_profile": {"fragrance": "Crisp and uplifting Green Fragrance", "care_level": "Gentle (Level 1)"},
+    "pro_tip": "Excellent choice for people with fine hair who wash frequently and want to avoid product buildup."
+  },
+  {
+    "product_name": "Supreme Length",
+    "primary_function": "Provides PROTECTION",
+    "ideal_hair_profile": "Long hair prone to greasy roots and dry, delicate ends. Also suitable for long hair that is somewhat damaged and needs protection from breakage.",
+    "core_philosophy": "Focuses on strengthening the hair strand from root to tip to prevent mechanical breakage and split ends, allowing hair to grow longer and stronger.",
+    "key_ingredients": [
+      {"name": "Peony Flower", "effect": "Soothes and supports a healthy scalp environment for strong hair growth."},
+      {"name": "Biotin Complex", "effect": "Strengthens the hair fiber, increasing resilience against daily stressors like brushing and styling."}
+    ],
+    "nutrient_mineral_profile": "Vitamin-rich formula, specifically Biotin to boost hair's structural integrity.",
+    "sensory_profile": {"fragrance": "Bright and pleasant Fruity fragrance", "care_level": "Gentle (Level 1)"},
+    "pro_tip": "For very long but damaged hair, recommend daily use with the Ultimate Repair Mask once a week for intensive repair."
+  },
+  {
+    "product_name": "Oil Nutritive",
+    "primary_function": "Provides NOURISHMENT",
+    "ideal_hair_profile": "Brittle, dull, and straw-like hair with visible split ends. Perfect for hair that lacks shine and smoothness.",
+    "core_philosophy": "Replenishes lost lipids to deeply nourish, increase flexibility, and seal the cuticle for a smooth, high-shine finish.",
+    "key_ingredients": [
+      {"name": "Marula Oil", "effect": "Smooths the hair cuticle, fights frizz, and imparts shine without greasy feel."},
+      {"name": "Omega 9", "effect": "Restores elasticity and softness, making brittle hair more flexible."}
+    ],
+    "nutrient_mineral_profile": "Rich in Omega 6 & 9 and essential Vitamins; designed for nourishment rather than deep protein repair.",
+    "sensory_profile": {"fragrance": "Warm and luxurious Sensual rich fragrance", "care_level": "Medium (Level 2)"},
+    "pro_tip": "Ideal for users who complain their hair feels 'like straw' and has lost its luster."
+  },
+  {
+    "product_name": "Total Repair",
+    "primary_function": "Provides REGENERATION",
+    "ideal_hair_profile": "Moderately damaged, stressed, or porous hair. Suitable for hair that has been through single coloring and needs restoration without heavy repair.",
+    "core_philosophy": "Refills gaps in hair structure with essential nutrients, regenerating stressed hair and restoring suppleness and bounce.",
+    "key_ingredients": [
+      {"name": "Floral Nectar", "effect": "Restores hair's natural softness and flexibility, combating stiffness."},
+      {"name": "Hydrolyzed Keratin", "effect": "Penetrates the hair shaft to patch areas of moderate damage, regenerating the surface and internal structure."}
+    ],
+    "nutrient_mineral_profile": "Rich in Amino Acids (from keratin) and Vitamins for hair regeneration.",
+    "sensory_profile": {"fragrance": "Comforting Cocooning musk fragrance", "care_level": "Deep (Level 3)"},
+    "pro_tip": "Perfect step-down for someone who finished Ultimate Repair and wants to maintain restored hair health."
+  },
+  {
+    "product_name": "Ultimate Repair",
+    "primary_function": "Provides STRENGTH",
+    "ideal_hair_profile": "Severely damaged, over-processed, bleached, multi-colored, or frequently heat-treated hair.",
+    "core_philosophy": "Deep reconstructive treatment that rebuilds internal bonds and fortifies the hair structure from inside out to reduce breakage and restore elasticity.",
+    "key_ingredients": [
+      {"name": "Black Pearl", "effect": "Fortifies internal structure and restores strength and resilience."},
+      {"name": "Liquid Keratin", "effect": "Refills severely damaged cuticle gaps, repairs damage, and prevents breakage."}
+    ],
+    "nutrient_mineral_profile": "Rich in Calcium, Magnesium, and Zinc, plus Antioxidants for comprehensive repair.",
+    "sensory_profile": {"fragrance": "Warm and luxurious Sensual rich fragrance", "care_level": "Deep (Level 3)"},
+    "pro_tip": "Go-to recommendation for hair recovering from major bleaching or frequent high-heat styling."
+  }
+]
