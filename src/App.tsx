@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { FaVolumeOff, FaVolumeUp } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
 import ProgressBar from './components/ProgressBar'
+import HairQuestionCard from './components/HairQuestionCard'
 import './App.css'
 
 interface Video {
@@ -22,6 +23,24 @@ function App() {
   const videoRef = useRef<HTMLVideoElement>(null)
   
   const TOTAL_QUESTIONS = 7
+
+  const questions = [
+    "How long is your hair?",
+    "How often do you wash your hair?",
+    "Do you color your hair?",
+    "What is your main hair concern?",
+  ]
+
+  const answers = [
+    ["Short", "Medium ", "Long"],
+    ["Daily", "2-3 times a week", "Weekly", "Less often"],
+    ["Yes, regularly", "Yes, occasionally", "No"],
+    ["Dryness", "Frizz", "Damage", "Oiliness"],
+  ]
+
+  const handleQuestionClick = (index: number) => {
+    setCurrentQuestion(index)
+  }
 
   useEffect(() => {
     const video = videoRef.current
@@ -122,11 +141,18 @@ function App() {
             </motion.p>
           </motion.div>
           
-          {/* Progress Bar */}
-          <ProgressBar 
-            currentQuestion={currentQuestion}
-            totalQuestions={TOTAL_QUESTIONS}
-            onQuestionClick={setCurrentQuestion}
+          {/* Hair Question Card */}
+          <HairQuestionCard
+            question={questions[currentQuestion]}
+            answers={answers[currentQuestion]}
+            currentQuestion={currentQuestion + 1}
+            totalQuestions={questions.length}
+            onNext={() => {
+              if (currentQuestion < questions.length - 1) {
+                setCurrentQuestion(currentQuestion + 1)
+              }
+            }}
+            onQuestionClick={handleQuestionClick}
           />
         </motion.div>
       </div>
