@@ -40,7 +40,7 @@ Hair quiz answers:
 Image analysis:
 {image_analysis}
 
-Provide your response in **this exact format**:
+Provide your response in **this exact format** and nothing else where the recommended line only has the shampoo name:
 
 Recommended line: <name of Gliss line>
 Reason: <short explanation why this line suits the user>

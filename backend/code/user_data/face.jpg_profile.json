@@ -2,17 +2,17 @@
   "quiz": {
     "length": "Medium",
     "greasy_roots": true,
-    "split_ends": false,
+    "split_ends": true,
     "dryness": "somewhat dry",
-    "shine": "super shiny, almost reflective",
-    "colored": "Occasionally",
+    "shine": "a little dull",
+    "colored": "Never",
     "heat": "Rarely"
   },
-  "image_analysis": "Based on the provided image and its crops, here's an analysis of the hair condition:\n\n*   **Hair Type:** The hair appears to be naturally dark, with a wavy to curly texture.\n\n*   **Dryness:** The hair shows signs of moderate dryness. It lacks a smooth, hydrated look and instead has a slightly matte or coarse appearance, which is common in hair that could benefit from more moisture. It doesn't look severely parched or brittle, but it's not deeply hydrated either.\n\n*   **Shine:** There is a noticeable lack of shine. The hair appears predominantly matte, reflecting very little light. This suggests the cuticles might be raised or the hair is lacking sufficient natural oils/hydration to create a smooth, reflective surface.\n\n*   **Frizz:** Frizz is visibly present, particularly around the crown and along the lengths of the hair. This is typical for curly/wavy hair, especially if it lacks moisture or has some cuticle damage, contributing to a less defined and somewhat unruly texture.\n\n*   **Split Ends:** Due to the dark color, curly texture, and the resolution of the image, it is **very difficult to definitively identify individual split ends.** While the presence of frizz and moderate dryness often correlates with split ends, they are not clearly visible in this photograph.\n\n*   **Visible Damage (other than frizz/split ends):** There are no obvious signs of severe damage such as extensive breakage, thinning, or chemical damage (like from coloring or heat styling). The hair appears to be in its natural state, with the primary concerns being dryness and frizz, which are common for this hair type and often indicate a need for more hydration and gentle care.",
+  "image_analysis": "Based on the provided image, here is an analysis of the hair condition:\n\n*   **Dryness:** The hair appears to be quite dry. It lacks a healthy luster and instead has a more matte finish, especially visible in the mid-lengths and ends. Individual strands often stand apart rather than clumping together, which is a common characteristic of dry hair lacking sufficient moisture.\n*   **Shine:** There is very low natural shine. The hair absorbs light more than it reflects it, indicating a raised or rough cuticle layer.\n*   **Frizz:** Significant frizz is noticeable, particularly around the crown and along the length of the hair. Many individual strands appear to be flying away or standing out, creating a somewhat unruly texture rather than smooth, defined waves or curls.\n*   **Split Ends:** While individual split ends are not clearly discernible at this resolution, the ends of the hair appear somewhat thinner and less cohesive than the rest of the strand. This, coupled with the overall dryness and frizz, suggests that split ends are likely present or the hair is prone to them and could benefit from a trim.\n*   **Visible Damage:** The primary visible damage manifests as dryness and frizz, which indicate a compromised outer cuticle layer. There are no obvious signs of severe breakage (like very short, jagged pieces throughout the length), or major chemical damage. The hair appears to have good overall density, but its texture suggests it would benefit from deep conditioning and moisturizing treatments to improve its health and appearance.",
   "recommendation": {
     "recommended_line": "Oil Nutritive",
-    "reason": "Your hair exhibits moderate dryness, a noticeable lack of shine, and frizz according to the image analysis, which align with \"dull hair\" needing \"nourishment\" and products that add \"shine and smoothness.\" This line will provide the deeper care needed for your hair's current condition.",
-    "product_routine": "Oil Nutritive Shampoo + Oil Nutritive Conditioner + Oil Nutritive Intensive Repair Mask",
-    "alternative": "Aqua Revive. While it provides moisture for somewhat dry hair, your hair's visible dullness and frizz suggest a need for more intensive nourishment and shine enhancement that Oil Nutritive offers."
+    "reason": "Your hair is quite dry, dull, and prone to split ends and frizz. Oil Nutritive deeply nourishes, adds shine, and smooths for healthier, more resilient hair.",
+    "product_routine": "Oil Nutritive Shampoo + Oil Nutritive Conditioner + Oil Nutritive 4-in-1 Mask",
+    "alternative": null
   }
 }
