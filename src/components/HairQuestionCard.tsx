@@ -1,6 +1,6 @@
 import React from "react";
-import ProgressBar from './ProgressBar'
-import FaceCapture from './FaceCapture'
+import ProgressBar from "./ProgressBar";
+import FaceCapture from "./FaceCapture";
 import "./HairQuestionCard.css";
 
 interface HairQuestionCardProps {
@@ -9,16 +9,16 @@ interface HairQuestionCardProps {
   subtitle?: string;
   currentQuestion: number;
   totalQuestions: number;
-  capturedImage?: string | null
+  capturedImage?: string | null;
   onNext?: () => void;
   onQuestionClick?: (index: number) => void;
   onMoreDetailsClick?: () => void;
   selectedAnswer: string | null;
   setSelectedAnswer: (answer: string) => void;
-  showFaceCapture?: boolean
-  onFaceCapture?: (imageData: string) => void
-  onSkipFaceCapture?: () => void
-  isFaceCaptureStep?: boolean
+  showFaceCapture?: boolean;
+  onFaceCapture?: (imageData: string) => void;
+  onSkipFaceCapture?: () => void;
+  isFaceCaptureStep?: boolean;
 }
 
 const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
@@ -33,10 +33,10 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
   onMoreDetailsClick,
   selectedAnswer,
   setSelectedAnswer,
-    showFaceCapture = false,
-    onFaceCapture,
-    onSkipFaceCapture,
-    isFaceCaptureStep = false
+  showFaceCapture = false,
+  onFaceCapture,
+  onSkipFaceCapture,
+  isFaceCaptureStep = false,
 }) => {
   const handleSelect = (answer: string) => {
     setSelectedAnswer(answer);
@@ -79,15 +79,15 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
               <h2 className="text-2xl font-bold text-stone-900">
                 {currentQuestion + 1}/ {question}
               </h2>
-              <p className="text-sm text-stone-600">
-                {subtitle}
-              </p>
+              <p className="text-sm text-stone-600">{subtitle}</p>
             </div>
 
             {/* Face Capture Component */}
-            <FaceCapture 
+            <FaceCapture
               onCapture={onFaceCapture || (() => {})}
               onSkip={onSkipFaceCapture || (() => {})}
+              onNext={onSkipFaceCapture || (() => {})}
+              capturedImage={capturedImage}
             />
           </div>
         </div>
@@ -102,7 +102,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
           />
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -127,7 +127,6 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
               <span className="button-text">More details</span>
             </button>
           </div>
-
 
           {/* Divider */}
           <div className="h-px bg-stone-200" />
@@ -188,7 +187,7 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
           totalQuestions={totalQuestions}
           onQuestionClick={handleQuestionClick}
           showFaceCapture={showFaceCapture}
-      />
+        />
       </div>
     </div>
   );

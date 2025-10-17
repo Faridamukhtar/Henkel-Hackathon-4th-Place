@@ -45,7 +45,7 @@
   left: 0;
   right: 0;
   height: 32px;
-  z-index: 3;
+  z-index: 10;
 }
 
 .progress-dot {
@@ -59,10 +59,9 @@
   cursor: default;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  z-index: 4;
+  z-index: 11;
   border: 3px solid #e9ecef;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  pointer-events: none; /* default non-interactive */
 }
 
 .progress-dot:hover {
@@ -72,7 +71,6 @@
 /* Past dots become interactive */
 .progress-dot.past {
   cursor: pointer;
-  pointer-events: auto;
 }
 
 .progress-dot.past:hover {

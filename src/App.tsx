@@ -1,37 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { FaVolumeOff, FaVolumeUp } from 'react-icons/fa'
-import { AnimatePresence, motion } from 'framer-motion'
-import HairQuestionCard from './components/HairQuestionCard'
-import DetailsGuide from './components/DetailsGuide'
-import FaceCapture from './components/FaceCapture'
-import ProgressBar from './components/ProgressBar'
-import './App.css'
+import React, { useState, useEffect, useRef } from "react";
+import { FaVolumeOff, FaVolumeUp } from "react-icons/fa";
+import { AnimatePresence, motion } from "framer-motion";
+import HairQuestionCard from "./components/HairQuestionCard";
+import DetailsGuide from "./components/DetailsGuide";
+import "./App.css";
 
 interface Video {
-  src: string
+  src: string;
 }
 
 const VIDEOS: Video[] = [
-  { src: '/assets/influencer1.MP4' },
-  { src: '/assets/influencer2.MP4' },
-  { src: '/assets/influencer3.MP4' },
-  { src: '/assets/influencer4.MP4' }
-]
+  { src: "/assets/influencer1.MP4" },
+  { src: "/assets/influencer2.MP4" },
+  { src: "/assets/influencer3.MP4" },
+  { src: "/assets/influencer4.MP4" },
+];
 
 function App() {
-  const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0)
-  const [isMuted, setIsMuted] = useState<boolean>(true)
-  const [currentQuestion, setCurrentQuestion] = useState<number>(0) // Start at 0, face capture is question 0
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false)
-  const [capturedImage, setCapturedImage] = useState<string | null>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [length, setLength] = useState<string | null>(null)
-  const [greasiness, setGreasiness] = useState<string | null>(null)
-  const [splitEnds, setSplitEnds] = useState<string | null>(null)
-  const [dryness, setDryness] = useState<string | null>(null)
-  const [shine, setShine] = useState<string | null>(null)
-  const [colored, setColored] = useState<string | null>(null)
-  const [heatStyling, setHeatStyling] = useState<string | null>(null)
+  const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0);
+  const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0); // Start at 0, face capture is question 0
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [length, setLength] = useState<string | null>(null);
+  const [greasiness, setGreasiness] = useState<string | null>(null);
+  const [splitEnds, setSplitEnds] = useState<string | null>(null);
+  const [dryness, setDryness] = useState<string | null>(null);
+  const [shine, setShine] = useState<string | null>(null);
+  const [colored, setColored] = useState<string | null>(null);
+  const [heatStyling, setHeatStyling] = useState<string | null>(null);
   const questions = [
     "How long is your hair?",
     "How soon after washing does your hair or scalp start to feel oily?",
@@ -40,9 +38,10 @@ function App() {
     "How would you describe your hair’s shine in sunlight",
     "How often do you bleach/color your hair?",
     "How often do you use heat styling tools (like flat irons, curling wands, blow dryers)?",
-  ]
+  ];
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(
-    Array(questions.length).fill(false));
+    Array(questions.length).fill(false)
+  );
   const answers = [
     ["Short", "Medium", "Long"],
     ["Every day", "Every 2–3 days", "Once a week"],
@@ -51,7 +50,7 @@ function App() {
     ["Super shiny, Almost reflective", "A little dull", "Dull", "I’m not sure"],
     ["Regularly", "Occasionally", "Rarely", "Never"],
     ["Regularly", "Occasionally", "Rarely", "Never"],
-  ]
+  ];
 
   const subtitles = [
     "Choose the length that best describes your hair.",
@@ -61,7 +60,7 @@ function App() {
     "Shine reflects the health and hydration of your hair.",
     "Frequent bleaching/coloring can lead to dryness and breakage.",
     "Excessive heat styling can damage hair cuticles.",
-  ]
+  ];
 
   const selectedAnswers = [
     length,
@@ -70,8 +69,8 @@ function App() {
     dryness,
     shine,
     colored,
-    heatStyling
-  ]
+    heatStyling,
+  ];
 
   const setters = [
     setLength,
@@ -80,8 +79,8 @@ function App() {
     setDryness,
     setShine,
     setColored,
-    setHeatStyling
-  ]
+    setHeatStyling,
+  ];
 
   const handleSubmit = () => {
     const hair_info: {
@@ -95,11 +94,11 @@ function App() {
     } = {};
 
     // Q1: Hair Length
-    if (length != null)
-      hair_info.length = length.toLowerCase();
+    if (length != null) hair_info.length = length.toLowerCase();
 
     // Q2: Oiliness frequency → greasy_roots
-    hair_info.greasy_roots = greasiness === "Every day" || greasiness === "Every 2–3 days";
+    hair_info.greasy_roots =
+      greasiness === "Every day" || greasiness === "Every 2–3 days";
 
     // Q3: Split ends
     hair_info.split_ends = splitEnds === "Yes";
@@ -137,76 +136,70 @@ function App() {
     }
 
     // Q6: Bleach/Color frequency
-    if (colored != null)
-      hair_info.colored = colored
+    if (colored != null) hair_info.colored = colored;
 
     // Q7: Heat styling frequency → damage
-    if (heatStyling != null)
-      hair_info.heat = heatStyling
+    if (heatStyling != null) hair_info.heat = heatStyling;
 
     return hair_info;
   };
 
-
-
   const handleQuestionClick = (index: number) => {
-    const canJump = answeredQuestions.slice(0, index).every(ans => ans);
+    const canJump = answeredQuestions.slice(1, index).every((ans) => ans);
     if (canJump) {
       setCurrentQuestion(index);
     }
   };
 
-
   const handleMoreDetailsClick = () => {
-    setIsDetailsModalOpen(true)
-  }
+    setIsDetailsModalOpen(true);
+  };
 
   const handleCloseModal = () => {
-    setIsDetailsModalOpen(false)
-  }
+    setIsDetailsModalOpen(false);
+  };
 
   const handleFaceCapture = (imageData: string) => {
-    setCapturedImage(imageData)
-    setCurrentQuestion(1) // Move to first hair question after face capture
-  }
+    // Store the captured image only; navigation handled by Next
+    setCapturedImage(imageData);
+  };
 
   const handleSkipFaceCapture = () => {
-    setCurrentQuestion(1) // Move to first hair question after skipping
-  }
+    setCurrentQuestion(1); // Move to first hair question after skipping
+  };
 
   useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
+    const video = videoRef.current;
+    if (!video) return;
 
     const handleVideoEnd = () => {
-      setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % VIDEOS.length)
-    }
+      setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % VIDEOS.length);
+    };
 
-    video.addEventListener('ended', handleVideoEnd)
-    return () => video.removeEventListener('ended', handleVideoEnd)
-  }, [])
+    video.addEventListener("ended", handleVideoEnd);
+    return () => video.removeEventListener("ended", handleVideoEnd);
+  }, []);
 
   useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
+    const video = videoRef.current;
+    if (!video) return;
 
     // Pause video during face capture to reduce resource competition
     if (currentQuestion === 0) {
-      video.pause()
+      video.pause();
     } else {
-      video.load()
-      video.play().catch(console.error)
+      video.load();
+      video.play().catch(console.error);
     }
-  }, [currentVideoIndex, currentQuestion])
+  }, [currentVideoIndex, currentQuestion]);
 
   const toggleMute = () => {
-    const video = videoRef.current
-    if (!video) return
+    const video = videoRef.current;
+    if (!video) return;
 
-    video.muted = !video.muted
-    setIsMuted(video.muted)
-  }
-
+    video.muted = !video.muted;
+    setIsMuted(video.muted);
+  };
 
   return (
     <motion.div
@@ -217,10 +210,7 @@ function App() {
     >
       <div className="split-container">
         {/* Left Side - Single Video Player */}
-        <div
-          className="video-section"
-          onClick={toggleMute}
-        >
+        <div className="video-section" onClick={toggleMute}>
           <div className="video-container">
             <video
               ref={videoRef}
@@ -242,9 +232,11 @@ function App() {
               {VIDEOS.map((_, index) => (
                 <div
                   key={index}
-                  className={`indicator ${index === currentVideoIndex ? 'active' : ''}`}
+                  className={`indicator ${
+                    index === currentVideoIndex ? "active" : ""
+                  }`}
                   onClick={() => {
-                    setCurrentVideoIndex(index)
+                    setCurrentVideoIndex(index);
                   }}
                 />
               ))}
@@ -265,7 +257,6 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -284,9 +275,17 @@ function App() {
 
           {/* Hair Question Card */}
           <HairQuestionCard
-            question={currentQuestion === 0 ? "Let's start by capturing your face" : questions[currentQuestion - 1]}
+            question={
+              currentQuestion === 0
+                ? "Let's start by capturing your face"
+                : questions[currentQuestion - 1]
+            }
             answers={currentQuestion === 0 ? [] : answers[currentQuestion - 1]}
-            subtitle={currentQuestion === 0 ? "Position your face within the guide and capture a photo" : subtitles[currentQuestion - 1]}
+            subtitle={
+              currentQuestion === 0
+                ? "Position your face within the guide and capture a photo"
+                : subtitles[currentQuestion - 1]
+            }
             currentQuestion={currentQuestion} // Keep 0-based for internal logic
             totalQuestions={questions.length + 1} // 7 questions + 1 face capture = 8 total steps
             capturedImage={capturedImage}
@@ -294,18 +293,26 @@ function App() {
             onNext={() => {
               // Mark current question as answered
               const updated = [...answeredQuestions];
-              updated[currentQuestion] = true;
+              if (currentQuestion > 0) {
+                updated[currentQuestion - 1] = true;
+              }
               setAnsweredQuestions(updated);
 
               // Move to next question if it exists
-              if (currentQuestion < questions.length - 1) {
+              if (currentQuestion < questions.length) {
                 setCurrentQuestion(currentQuestion + 1);
               }
             }}
             onQuestionClick={handleQuestionClick}
             onMoreDetailsClick={handleMoreDetailsClick}
-            selectedAnswer={currentQuestion === 0 ? null : selectedAnswers[currentQuestion - 1]}
-            setSelectedAnswer={currentQuestion === 0 ? () => {} : setters[currentQuestion - 1]}
+            selectedAnswer={
+              currentQuestion === 0
+                ? null
+                : selectedAnswers[currentQuestion - 1]
+            }
+            setSelectedAnswer={
+              currentQuestion === 0 ? () => {} : setters[currentQuestion - 1]
+            }
             onFaceCapture={handleFaceCapture}
             onSkipFaceCapture={handleSkipFaceCapture}
             isFaceCaptureStep={currentQuestion === 0}
@@ -332,10 +339,7 @@ function App() {
                 >
                   <div className="modal-header">
                     <h3>Question Details</h3>
-                    <button
-                      className="close-button"
-                      onClick={handleCloseModal}
-                    >
+                    <button className="close-button" onClick={handleCloseModal}>
                       ×
                     </button>
                   </div>
@@ -350,7 +354,7 @@ function App() {
         </motion.div>
       </div>
     </motion.div>
-  )
+  );
 }
 
-export default App
+export default App;
