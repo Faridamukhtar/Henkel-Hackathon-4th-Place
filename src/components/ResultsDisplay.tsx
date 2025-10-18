@@ -288,7 +288,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
           }}>
             {/* Main Recommendation */}
             <div style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: theme ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.secondary} 100%)` : undefined,
               color: 'white',
               borderRadius: '16px',
               padding: '1.5rem',
