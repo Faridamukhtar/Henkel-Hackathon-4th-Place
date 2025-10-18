@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { FaVolumeOff, FaVolumeUp } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import HairQuestionCard from "./components/HairQuestionCard";
-import DetailsGuide from "./components/DetailsGuide";
 import LandingPage from "./components/LandingPage";
 import ResultsDisplay from "./components/ResultsDisplay";
 import "./App.css";
@@ -486,10 +485,7 @@ function App() {
                               ×
                             </button>
                           </div>
-                          <DetailsGuide
-                              currentQuestion={currentQuestion}
-                              question={questions[currentQuestion]}
-                          />
+                          
                         </motion.div>
                       </motion.div>
                   )}
