@@ -98,7 +98,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
   
   const API_URL = "https://melvina-heelless-yang.ngrok-free.dev";
 
-  const [showResults, setShowResults] = useState<boolean>(false);
+  const [showResults, setShowResults] = useState<boolean>(true);
   const [selectedCelebrity, setSelectedCelebrity] = useState<Celebrity | null>(null);
   const [userImage, setUserImage] = useState<File | null>(null);
   const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
@@ -108,6 +108,20 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [matchedCelebrities, setMatchedCelebrities] = useState<Celebrity[]>([]);
+
+  useEffect(() => {
+    if (recommendation?.recommended_line) {
+      const recommendedLine = recommendation.recommended_line;
+      
+      const filtered = celebrityData.celebrities.filter(
+        (cel) =>
+          cel.product_line.toLowerCase().includes(recommendedLine.toLowerCase()) ||
+          recommendedLine.toLowerCase().includes(cel.product_line.toLowerCase())
+      );
+      
+      setMatchedCelebrities(filtered);
+    }
+  }, [recommendation]);
 
   useEffect(() => {
     handleCelebrityReveal(selectedCelebrity?.image_path || "");
@@ -272,7 +286,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
           }}>
             {/* Main Recommendation */}
             <div style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: theme ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.secondary} 100%)` : undefined,
               color: 'white',
               borderRadius: '16px',
               padding: '1.5rem',
@@ -333,7 +347,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
                     alt={recommendation.recommended_line}
                     style={{
                       width: '100%',
-                      height: '100vh',
+                      height: '100%',
                       objectFit: 'contain',
                       animation: 'fadeInScale 0.6s ease-out'
                     }}
@@ -387,35 +401,6 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
                 {recommendation.product_routine}
               </p>
             </div>
-
-            {/* Alternative */}
-            {recommendation.alternative && (
-              <div style={{
-                background: 'white',
-                borderRadius: '16px',
-                padding: '1.5rem',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-                border: '1px solid #e9ecef',
-                transition: 'all 0.3s ease'
-              }}>
-                <h3 style={{
-                  fontSize: '1.25rem',
-                  fontWeight: '600',
-                  color: '#2c3e50',
-                  margin: '0 0 0.5rem 0'
-                }}>
-                  Alternative Option
-                </h3>
-                <p style={{
-                  fontSize: '1rem',
-                  color: '#495057',
-                  lineHeight: '1.6',
-                  margin: '0'
-                }}>
-                  {recommendation.alternative}
-                </p>
-              </div>
-            )}
 
             {/* Image Analysis */}
             {image_analysis && (
