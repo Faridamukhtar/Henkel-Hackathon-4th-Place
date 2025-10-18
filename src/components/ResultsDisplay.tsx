@@ -32,7 +32,7 @@ const celebrityData: { celebrities: Celebrity[] } = {
   celebrities: [
     {
       name: "Sofía Vergara",
-      product_line: "Full Hair Wonder",
+      product_line: "Total Repair",
       association_level: "verified",
       reference: "Official Schwarzkopf Gliss campaign ambassador",
       image_path: sofia,
@@ -53,7 +53,7 @@ const celebrityData: { celebrities: Celebrity[] } = {
     },
     {
       name: "Sophie Passmann",
-      product_line: "Liquid Silk",
+      product_line: "Aqua Revive",
       association_level: "semi-verified",
       reference: "Featured in Gliss Shine Booster reel",
       image_path: sophie,
@@ -118,6 +118,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
           cel.product_line.toLowerCase().includes(recommendedLine.toLowerCase()) ||
           recommendedLine.toLowerCase().includes(cel.product_line.toLowerCase())
       );
+
+      console.log("Filtered Celebrities:", filtered);
       
       setMatchedCelebrities(filtered);
     }
@@ -286,7 +288,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
           }}>
             {/* Main Recommendation */}
             <div style={{
-              background: theme ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.secondary} 100%)` : undefined,
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               color: 'white',
               borderRadius: '16px',
               padding: '1.5rem',
