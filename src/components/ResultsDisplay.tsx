@@ -426,7 +426,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
                   color: '#2c3e50',
                   margin: '0 0 0.5rem 0'
                 }}>
-                  Hair Analysis
+                  Image Analysis
                 </h3>
                 <p style={{
                   fontSize: '1rem',
