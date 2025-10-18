@@ -2,6 +2,9 @@ import React from "react";
 import ProgressBar from "./ProgressBar";
 import FaceCapture from "./FaceCapture";
 import "./HairQuestionCard.css";
+import longHairIcon from "../../assets/LongHair.png";
+import mediumHairIcon from "../../assets/MediumHair.png";
+import shortHairIcon from "../../assets/ShortHair.png";
 
 interface HairQuestionCardProps {
   question: string;
@@ -58,9 +61,9 @@ const HairQuestionCard: React.FC<HairQuestionCardProps> = ({
 
   const getIconForAnswer = (answer: string) => {
     const iconMap: { [key: string]: string } = {
-      Short: "/assets/ShortHair.png",
-      Medium: "/assets/MediumHair.png",
-      Long: "/assets/LongHair.png",
+      Short: shortHairIcon,
+      Medium: mediumHairIcon,
+      Long: longHairIcon,
     };
     return iconMap[answer] || "";
   };
