@@ -5,15 +5,25 @@ import HairQuestionCard from "./components/HairQuestionCard";
 import LandingPage from "./components/LandingPage";
 import ResultsDisplay from "./components/ResultsDisplay";
 import "./App.css";
+import influencer1 from "../assets/influencer1.MP4";
+import influencer2 from "../assets/influencer2.MP4";
+import influencer3 from "../assets/influencer3.MP4";
+import influencer4 from "../assets/influencer4.MP4";
+import aquaImage from "../assets/aqua.jpg";
+import supremeLengthImage from "../assets/supreme length.jpg";
+import oilNutritiveImage from "../assets/oil nutritive.jpg";
+import ultimateRepairImage from "../assets/ultimate repare.jpg";
+import totalRepairImage from "../assets/Total Repair.jpg";
+
 interface Video {
   src: string;
 }
 
 const VIDEOS: Video[] = [
-  { src: "/assets/influencer1.MP4" },
-  { src: "/assets/influencer2.MP4" },
-  { src: "/assets/influencer3.MP4" },
-  { src: "/assets/influencer4.MP4" },
+  { src: influencer1 },
+  { src: influencer2 },
+  { src: influencer3 },
+  { src: influencer4 },
 ];
 
 function App() {
@@ -225,11 +235,11 @@ function App() {
 
   const getProductImage = (productLine: string) => {
     const imageMap: { [key: string]: string } = {
-      "Aqua Revive": "/assets/aqua.jpg",
-      "Supreme Length": "/assets/supreme length.jpg",
-      "Oil Nutritive": "/assets/oil nutritive.jpg",
-      "Ultimate Repair": "/assets/ultimate repare.jpg",
-      "Total Repair": "/assets/Total Repair.jpg"
+      "Aqua Revive": aquaImage,
+      "Supreme Length": supremeLengthImage,
+      "Oil Nutritive": oilNutritiveImage,
+      "Ultimate Repair": ultimateRepairImage,
+      "Total Repair": totalRepairImage
     };
     
     // Find matching product line (case insensitive)
