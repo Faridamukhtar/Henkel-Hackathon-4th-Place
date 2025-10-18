@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import * as tf from "@tensorflow/tfjs";
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 import "./FaceCapture.css";
+import aquaSpinner from "../../assets/aqua.png"
 
 // Types
 interface FaceCaptureProps {
@@ -398,7 +399,7 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({
       {isLoading ? (
         <div className="loading-spinner">
           <div className="aqua-spinner">
-            <img src="/assets/aqua.png" alt="Loading..." className="spinning-bottle" />
+            <img src={aquaSpinner} alt="Loading..." className="spinning-bottle" />
           </div>
           <p>Loading camera and face detection...</p>
         </div>

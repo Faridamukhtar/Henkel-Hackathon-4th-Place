@@ -5,6 +5,12 @@ import nadine from "../../assets/celebrities/2.jpg";
 import ana from "../../assets/celebrities/3.webp";
 import sophie from "../../assets/celebrities/4.jpg";
 import phoebe from "../../assets/celebrities/5.jpg";
+import aquaImage from "../../assets/aqua.jpg";
+import supremeLengthImage from "../../assets/supreme length.jpg";
+import oilNutritiveImage from "../../assets/oil nutritive.jpg";
+import ultimateRepairImage from "../../assets/ultimate repare.jpg";
+import totalRepairImage from "../../assets/Total Repair.jpg";
+import glissLogo from "../../assets/Gliss Logo 1.png";
 
 interface Celebrity {
   name: string;
@@ -78,12 +84,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
   const { recommendation, image_analysis } = results;
   const getProductImage = (productLine: string) => {
   const imageMap: { [key: string]: string } = {
-    "Aqua Revive": "/assets/aqua.jpg",
-    "Supreme Length": "/assets/supreme length.jpg",
-    "Oil Nutritive": "/assets/oil nutritive.jpg",
-    "Ultimate Repair": "/assets/ultimate repare.jpg",
-    "Total Repair": "/assets/Total Repair.jpg",
-    "Full Hair Wonder": "/assets/Gliss Logo 1.png",
+    "Aqua Revive": aquaImage,
+    "Supreme Length": supremeLengthImage,
+    "Oil Nutritive": oilNutritiveImage,
+    "Ultimate Repair": ultimateRepairImage,
+    "Total Repair": totalRepairImage,
+    "Full Hair Wonder": glissLogo,
   };
   
   const normalizedLine = productLine.toLowerCase();
@@ -93,7 +99,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onRestart, the
     }
   }
   
-  return "/assets/Gliss Logo 1.png";
+  return glissLogo;
 };
   
   const API_URL = "https://melvina-heelless-yang.ngrok-free.dev";

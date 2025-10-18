@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './LandingPage.css';
+import glissLogo from "../../assets/Gliss Logo 1.png"
 
 interface LandingPageProps {
   onStartQuiz: () => void;
@@ -18,7 +19,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartQuiz }) => {
       {/* Header */}
       <header className="landing-header">
         <div className="logo">
-          <img src="/assets/Gliss Logo 1.png" alt="Schwarzkopf" className="logo-image" />
+          <img src={glissLogo} alt="Schwarzkopf" className="logo-image" />
         </div>
       </header>
 

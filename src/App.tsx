@@ -14,6 +14,7 @@ import supremeLengthImage from "../assets/supreme length.jpg";
 import oilNutritiveImage from "../assets/oil nutritive.jpg";
 import ultimateRepairImage from "../assets/ultimate repare.jpg";
 import totalRepairImage from "../assets/Total Repair.jpg";
+import aquaSpinner from "../assets/aqua.png";
 
 interface Video {
   src: string;
@@ -383,7 +384,7 @@ function App() {
             <div className="loading-container">
               <div className="aqua-spinner">
                 <img 
-                  src="/assets/aqua.png" 
+                  src={aquaSpinner} 
                   alt="Loading Shampoo"
                   className="spinning-bottle"
                 />
