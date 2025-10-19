@@ -4,7 +4,7 @@ import torch
 # Load embedding model
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
-def load_knowledge_base(path="/Users/Abdallah/Henkel-Hackathon/backend/data/gliss_knowledge.txt"):
+def load_knowledge_base(path="../data/gliss_knowledge.txt"):
     with open(path, "r", encoding="utf-8") as f:
         docs = [d.strip() for d in f.read().split("\n\n") if d.strip()]
     embeddings = embedder.encode(docs, convert_to_tensor=True)
@@ -16,7 +16,7 @@ def retrieve_relevant_docs(query, docs, embeddings, top_k=2):
     top_results = torch.topk(scores, k=top_k)
     return [docs[i] for i in top_results[1]]
 
-def load_knowledge_base_chatbot(path="/Users/Abdallah/Henkel-Hackathon/backend/data/gliss_knowledge_chatbot.txt"):
+def load_knowledge_base_chatbot(path="../data/gliss_knowledge_chatbot.txt"):
     with open(path, "r", encoding="utf-8") as f:
         docs = [d.strip() for d in f.read().split("\n\n") if d.strip()]
     embeddings = embedder.encode(docs, convert_to_tensor=True)
