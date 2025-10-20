@@ -1,7 +1,7 @@
 import google.generativeai as genai
 from PIL import Image
 
-genai.configure(api_key="AIzaSyAdQomLWtUhRt_AMmIDObnZdrF_lP7T0kM")
+genai.configure(api_key="API_KEY")
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 def analyze_hair_image(image_path, max_chars=100):
