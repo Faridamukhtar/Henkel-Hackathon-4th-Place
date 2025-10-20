@@ -2,7 +2,7 @@ from groq import Groq
 import re
 
 # Initialize Groq client
-client = Groq(api_key="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")
+client = Groq(api_key="API_KEY")
 
 GLISS_SYSTEM_PROMPT = """
 You are a professional hair-care expert who specializes in Schwarzkopf Gliss products.
