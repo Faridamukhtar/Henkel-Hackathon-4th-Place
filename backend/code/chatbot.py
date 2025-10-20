@@ -3,7 +3,7 @@ from recommender import generate_final_prediction
 import google.generativeai as genai
 
 # Configure API key globally
-genai.configure(api_key="AIzaSyAdQomLWtUhRt_AMmIDObnZdrF_lP7T0kM")
+genai.configure(api_key="API_KEY")
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 docs, embeddings = load_knowledge_base_chatbot()
